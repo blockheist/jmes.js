@@ -27,9 +27,10 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "es5",
+    "target": "es6",
     "paths": {
       "*": ["src/*"]
-    }
+    },
+    "noEmitOnError": false
   }
 }

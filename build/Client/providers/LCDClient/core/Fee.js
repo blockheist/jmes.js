@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,70 +24,67 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Fee = void 0;
-var json_1 = require("../util/json");
-var Coins_1 = require("./Coins");
-var numeric_1 = require("./numeric");
-var tx_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx");
-var Long = __importStar(require("long"));
+const json_1 = require("../util/json");
+const Coins_1 = require("./Coins");
+const numeric_1 = require("./numeric");
+const tx_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx");
+const Long = __importStar(require("long"));
 /**
  * A transaction must include a fee, otherwise it will be rejected.
  */
-var Fee = /** @class */ (function (_super) {
-    __extends(Fee, _super);
+class Fee extends json_1.JSONSerializable {
     /**
      * Creates a new Fee object.
      * @param gas gas limit
      * @param amount amount to be paid to validator
      */
-    function Fee(gas_limit, amount, payer, granter) {
-        var _this = _super.call(this) || this;
-        _this.gas_limit = gas_limit;
-        _this.payer = payer;
-        _this.granter = granter;
-        _this.amount = new Coins_1.Coins(amount);
-        return _this;
+    constructor(gas_limit, amount, payer, granter) {
+        super();
+        this.gas_limit = gas_limit;
+        this.payer = payer;
+        this.granter = granter;
+        this.amount = new Coins_1.Coins(amount);
     }
-    Fee.fromAmino = function (data) {
-        var gas = data.gas, amount = data.amount;
+    static fromAmino(data) {
+        const { gas, amount } = data;
         return new Fee(Number.parseInt(gas), Coins_1.Coins.fromAmino(amount), '', '');
-    };
-    Fee.prototype.toAmino = function () {
+    }
+    toAmino() {
         return {
             gas: new numeric_1.Int(this.gas_limit).toString(),
             amount: this.amount.toAmino(),
         };
-    };
-    Fee.fromData = function (data) {
+    }
+    static fromData(data) {
         return new Fee(Number.parseInt(data.gas_limit), Coins_1.Coins.fromData(data.amount), data.payer, data.granter);
-    };
-    Fee.prototype.toData = function () {
-        var _a = this, amount = _a.amount, gas_limit = _a.gas_limit, payer = _a.payer, granter = _a.granter;
+    }
+    toData() {
+        const { amount, gas_limit, payer, granter } = this;
         return {
             amount: amount.toData(),
             gas_limit: gas_limit.toFixed(),
             granter: granter !== null && granter !== void 0 ? granter : '',
             payer: payer !== null && payer !== void 0 ? payer : '',
         };
-    };
-    Fee.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new Fee(proto.gasLimit.toNumber(), Coins_1.Coins.fromProto(proto.amount), proto.payer, proto.granter);
-    };
-    Fee.prototype.toProto = function () {
-        var _a = this, amount = _a.amount, gas_limit = _a.gas_limit, payer = _a.payer, granter = _a.granter;
+    }
+    toProto() {
+        const { amount, gas_limit, payer, granter } = this;
         return tx_1.Fee.fromPartial({
             amount: amount.toProto(),
             gasLimit: Long.fromNumber(gas_limit),
-            granter: granter,
-            payer: payer,
+            granter,
+            payer,
         });
-    };
+    }
     /**
      * Gets the minimum gas prices implied by the fee. Minimum gas prices are `fee amount / gas`.
      */
-    Fee.prototype.gasPrices = function () {
+    gasPrices() {
         return this.amount.toDecCoins().div(this.gas_limit);
-    };
-    return Fee;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Fee = Fee;
 //# sourceMappingURL=Fee.js.map

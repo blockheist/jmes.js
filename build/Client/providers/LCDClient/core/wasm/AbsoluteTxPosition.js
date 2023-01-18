@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,54 +24,51 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AbsoluteTxPosition = void 0;
-var types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
-var json_1 = require("../../util/json");
-var Long = __importStar(require("long"));
+const types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
+const json_1 = require("../../util/json");
+const Long = __importStar(require("long"));
 /**
  *
  */
-var AbsoluteTxPosition = /** @class */ (function (_super) {
-    __extends(AbsoluteTxPosition, _super);
+class AbsoluteTxPosition extends json_1.JSONSerializable {
     /**
      * @param block_height
      * @param tx_index
      */
-    function AbsoluteTxPosition(block_height, tx_index) {
-        var _this = _super.call(this) || this;
-        _this.block_height = block_height;
-        _this.tx_index = tx_index;
-        return _this;
+    constructor(block_height, tx_index) {
+        super();
+        this.block_height = block_height;
+        this.tx_index = tx_index;
     }
-    AbsoluteTxPosition.fromAmino = function (data) {
+    static fromAmino(data) {
         return new AbsoluteTxPosition(Number.parseInt(data.block_height), Number.parseInt(data.tx_index));
-    };
-    AbsoluteTxPosition.prototype.toAmino = function () {
-        var res = {
+    }
+    toAmino() {
+        const res = {
             block_height: this.block_height.toFixed(),
             tx_index: this.tx_index.toFixed(),
         };
         return res;
-    };
-    AbsoluteTxPosition.fromData = function (data) {
+    }
+    static fromData(data) {
         return new AbsoluteTxPosition(Number.parseInt(data.block_height), Number.parseInt(data.tx_index));
-    };
-    AbsoluteTxPosition.prototype.toData = function () {
-        var res = {
+    }
+    toData() {
+        const res = {
             block_height: this.block_height.toFixed(),
             tx_index: this.tx_index.toFixed(),
         };
         return res;
-    };
-    AbsoluteTxPosition.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new AbsoluteTxPosition(proto.blockHeight.toNumber(), proto.txIndex.toNumber());
-    };
-    AbsoluteTxPosition.prototype.toProto = function () {
+    }
+    toProto() {
         return types_1.AbsoluteTxPosition.fromPartial({
             blockHeight: Long.fromNumber(this.block_height),
             txIndex: Long.fromNumber(this.tx_index),
         });
-    };
-    return AbsoluteTxPosition;
-}(json_1.JSONSerializable));
+    }
+}
 exports.AbsoluteTxPosition = AbsoluteTxPosition;
 //# sourceMappingURL=AbsoluteTxPosition.js.map

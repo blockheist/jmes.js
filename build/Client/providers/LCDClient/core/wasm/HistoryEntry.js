@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,57 +24,55 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HistoryEntry = void 0;
-var types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
-var json_1 = require("../../util/json");
-var Long = __importStar(require("long"));
-var AbsoluteTxPosition_1 = require("./AbsoluteTxPosition");
+const types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
+const json_1 = require("../../util/json");
+const Long = __importStar(require("long"));
+const AbsoluteTxPosition_1 = require("./AbsoluteTxPosition");
 /**
  *
  */
-var HistoryEntry = /** @class */ (function (_super) {
-    __extends(HistoryEntry, _super);
+class HistoryEntry extends json_1.JSONSerializable {
     /**
      * @param operation access type
      * @param code_id
      */
-    function HistoryEntry(operation, code_id, updated, msg) {
-        var _this = _super.call(this) || this;
-        _this.operation = operation;
-        _this.code_id = code_id;
-        _this.updated = updated;
-        _this.msg = msg;
-        return _this;
+    constructor(operation, code_id, updated, msg) {
+        super();
+        this.operation = operation;
+        this.code_id = code_id;
+        this.updated = updated;
+        this.msg = msg;
     }
-    HistoryEntry.fromAmino = function (data) {
+    static fromAmino(data) {
         return new HistoryEntry((0, types_1.contractCodeHistoryOperationTypeFromJSON)(data.operation), Number.parseInt(data.code_id), data.updated ? AbsoluteTxPosition_1.AbsoluteTxPosition.fromAmino(data.updated) : undefined, data.msg);
-    };
-    HistoryEntry.prototype.toAmino = function () {
+    }
+    toAmino() {
         var _a;
-        var res = {
+        const res = {
             operation: (0, types_1.contractCodeHistoryOperationTypeToJSON)(this.operation),
             code_id: this.code_id.toFixed(),
             updated: (_a = this.updated) === null || _a === void 0 ? void 0 : _a.toAmino(),
             msg: this.msg,
         };
         return res;
-    };
-    HistoryEntry.fromData = function (data) {
+    }
+    static fromData(data) {
         return new HistoryEntry((0, types_1.contractCodeHistoryOperationTypeFromJSON)(data.operation), Number.parseInt(data.code_id), data.updated ? AbsoluteTxPosition_1.AbsoluteTxPosition.fromData(data.updated) : undefined, data.msg);
-    };
-    HistoryEntry.prototype.toData = function () {
+    }
+    toData() {
         var _a;
-        var res = {
+        const res = {
             operation: (0, types_1.contractCodeHistoryOperationTypeToJSON)(this.operation),
             code_id: this.code_id.toFixed(),
             updated: (_a = this.updated) === null || _a === void 0 ? void 0 : _a.toData(),
             msg: this.msg,
         };
         return res;
-    };
-    HistoryEntry.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new HistoryEntry(proto.operation, proto.codeId.toNumber(), proto.updated ? AbsoluteTxPosition_1.AbsoluteTxPosition.fromProto(proto.updated) : undefined, JSON.parse(Buffer.from(proto.msg).toString('utf-8')));
-    };
-    HistoryEntry.prototype.toProto = function () {
+    }
+    toProto() {
         var _a;
         return types_1.ContractCodeHistoryEntry.fromPartial({
             operation: this.operation,
@@ -97,8 +80,7 @@ var HistoryEntry = /** @class */ (function (_super) {
             updated: (_a = this.updated) === null || _a === void 0 ? void 0 : _a.toProto(),
             msg: Buffer.from(JSON.stringify((0, json_1.removeNull)(this.msg)), 'utf-8'),
         });
-    };
-    return HistoryEntry;
-}(json_1.JSONSerializable));
+    }
+}
 exports.HistoryEntry = HistoryEntry;
 //# sourceMappingURL=HistoryEntry.js.map

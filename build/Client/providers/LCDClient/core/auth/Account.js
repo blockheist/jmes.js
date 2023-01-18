@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Account = void 0;
-var BaseAccount_1 = require("./BaseAccount");
-var LazyGradedVestingAccount_1 = require("./LazyGradedVestingAccount");
-var ContinuousVestingAccount_1 = require("./ContinuousVestingAccount");
-var DelayedVestingAccount_1 = require("./DelayedVestingAccount");
-var PeriodicVestingAccount_1 = require("./PeriodicVestingAccount");
-var BaseVestingAccount_1 = require("./BaseVestingAccount");
+const BaseAccount_1 = require("./BaseAccount");
+const LazyGradedVestingAccount_1 = require("./LazyGradedVestingAccount");
+const ContinuousVestingAccount_1 = require("./ContinuousVestingAccount");
+const DelayedVestingAccount_1 = require("./DelayedVestingAccount");
+const PeriodicVestingAccount_1 = require("./PeriodicVestingAccount");
+const BaseVestingAccount_1 = require("./BaseVestingAccount");
 /**
  * Stores information about an account fetched from the blockchain.
  */
@@ -49,7 +49,7 @@ var Account;
     }
     Account.fromData = fromData;
     function fromProto(accountAny, isClassic) {
-        var typeUrl = accountAny.typeUrl;
+        const typeUrl = accountAny.typeUrl;
         if (typeUrl === '/cosmos.auth.v1beta1.BaseAccount') {
             return BaseAccount_1.BaseAccount.unpackAny(accountAny, isClassic);
         }
@@ -65,7 +65,7 @@ var Account;
         else if (typeUrl === '/cosmos.vesting.v1beta1.PeriodicVestingAccount') {
             return PeriodicVestingAccount_1.PeriodicVestingAccount.unpackAny(accountAny, isClassic);
         }
-        throw new Error("Account type ".concat(typeUrl, " not recognized"));
+        throw new Error(`Account type ${typeUrl} not recognized`);
     }
     Account.fromProto = fromProto;
 })(Account = exports.Account || (exports.Account = {}));

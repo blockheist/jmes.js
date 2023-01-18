@@ -1,37 +1,22 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValConsPublicKey = exports.LegacyAminoMultisigPublicKey = exports.SimplePublicKey = exports.PublicKey = void 0;
-var json_1 = require("../util/json");
-var hash_1 = require("../util/hash");
-var keys_1 = require("@jmesworld/jmes.proto/src/cosmos/crypto/multisig/keys");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var keys_2 = require("@jmesworld/jmes.proto/src/cosmos/crypto/secp256k1/keys");
-var keys_3 = require("@jmesworld/jmes.proto/src/cosmos/crypto/ed25519/keys");
-var bech32_1 = require("bech32");
+const json_1 = require("../util/json");
+const hash_1 = require("../util/hash");
+const keys_1 = require("@jmesworld/jmes.proto/src/cosmos/crypto/multisig/keys");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const keys_2 = require("@jmesworld/jmes.proto/src/cosmos/crypto/secp256k1/keys");
+const keys_3 = require("@jmesworld/jmes.proto/src/cosmos/crypto/ed25519/keys");
+const bech32_1 = require("bech32");
 // As discussed in https://github.com/binance-chain/javascript-sdk/issues/163
 // Prefixes listed here: https://github.com/tendermint/tendermint/blob/d419fffe18531317c28c29a292ad7d253f6cafdf/docs/spec/blockchain/encoding.md#public-key-cryptography
 // Last bytes is varint-encoded length prefix
-var pubkeyAminoPrefixSecp256k1 = Buffer.from('eb5ae987' + '21' /* fixed length */, 'hex');
-var pubkeyAminoPrefixEd25519 = Buffer.from('1624de64' + '20' /* fixed length */, 'hex');
+const pubkeyAminoPrefixSecp256k1 = Buffer.from('eb5ae987' + '21' /* fixed length */, 'hex');
+const pubkeyAminoPrefixEd25519 = Buffer.from('1624de64' + '20' /* fixed length */, 'hex');
 /** See https://github.com/tendermint/tendermint/commit/38b401657e4ad7a7eeb3c30a3cbf512037df3740 */
-var pubkeyAminoPrefixMultisigThreshold = Buffer.from('22c1f7e2' /* variable length not included */, 'hex');
-var encodeUvarint = function (value) {
-    var checked = Number.parseInt(value.toString());
+const pubkeyAminoPrefixMultisigThreshold = Buffer.from('22c1f7e2' /* variable length not included */, 'hex');
+const encodeUvarint = (value) => {
+    const checked = Number.parseInt(value.toString());
     if (checked > 127) {
         throw new Error('Encoding numbers > 127 is not supported here. Please tell those lazy CosmJS maintainers to port the binary.PutUvarint implementation from the Go standard library and write some tests.');
     }
@@ -62,7 +47,7 @@ var PublicKey;
     }
     PublicKey.fromData = fromData;
     function fromProto(pubkeyAny) {
-        var typeUrl = pubkeyAny.typeUrl;
+        const typeUrl = pubkeyAny.typeUrl;
         if (typeUrl === '/cosmos.crypto.secp256k1.PubKey') {
             return SimplePublicKey.unpackAny(pubkeyAny);
         }
@@ -72,203 +57,193 @@ var PublicKey;
         else if (typeUrl === '/cosmos.crypto.ed25519.PubKey') {
             return ValConsPublicKey.unpackAny(pubkeyAny);
         }
-        throw new Error("Pubkey type ".concat(typeUrl, " not recognized"));
+        throw new Error(`Pubkey type ${typeUrl} not recognized`);
     }
     PublicKey.fromProto = fromProto;
 })(PublicKey = exports.PublicKey || (exports.PublicKey = {}));
-var SimplePublicKey = /** @class */ (function (_super) {
-    __extends(SimplePublicKey, _super);
-    function SimplePublicKey(key) {
-        var _this = _super.call(this) || this;
-        _this.key = key;
-        return _this;
+class SimplePublicKey extends json_1.JSONSerializable {
+    constructor(key) {
+        super();
+        this.key = key;
     }
-    SimplePublicKey.fromAmino = function (data) {
+    static fromAmino(data) {
         return new SimplePublicKey(data.value);
-    };
-    SimplePublicKey.prototype.toAmino = function () {
+    }
+    toAmino() {
         return {
             type: 'tendermint/PubKeySecp256k1',
             value: this.key,
         };
-    };
-    SimplePublicKey.fromData = function (data) {
+    }
+    static fromData(data) {
         return new SimplePublicKey(data.key);
-    };
-    SimplePublicKey.prototype.toData = function () {
+    }
+    toData() {
         return {
             '@type': '/cosmos.crypto.secp256k1.PubKey',
             key: this.key,
         };
-    };
-    SimplePublicKey.fromProto = function (pubkeyProto) {
+    }
+    static fromProto(pubkeyProto) {
         return new SimplePublicKey(Buffer.from(pubkeyProto.key).toString('base64'));
-    };
-    SimplePublicKey.prototype.toProto = function () {
+    }
+    toProto() {
         return keys_2.PubKey.fromPartial({
             key: Buffer.from(this.key, 'base64'),
         });
-    };
-    SimplePublicKey.prototype.packAny = function () {
+    }
+    packAny() {
         return any_1.Any.fromPartial({
             typeUrl: '/cosmos.crypto.secp256k1.PubKey',
             value: keys_2.PubKey.encode(this.toProto()).finish(),
         });
-    };
-    SimplePublicKey.unpackAny = function (pubkeyAny) {
+    }
+    static unpackAny(pubkeyAny) {
         return SimplePublicKey.fromProto(keys_2.PubKey.decode(pubkeyAny.value));
-    };
-    SimplePublicKey.prototype.encodeAminoPubkey = function () {
+    }
+    encodeAminoPubkey() {
         return Buffer.concat([
             pubkeyAminoPrefixSecp256k1,
             Buffer.from(this.key, 'base64'),
         ]);
-    };
-    SimplePublicKey.prototype.rawAddress = function () {
-        var pubkeyData = Buffer.from(this.key, 'base64');
-        return (0, hash_1.ripemd160)((0, hash_1.sha256)(pubkeyData));
-    };
-    SimplePublicKey.prototype.address = function () {
-        return bech32_1.bech32.encode('jmes', bech32_1.bech32.toWords(this.rawAddress()));
-    };
-    SimplePublicKey.prototype.pubkeyAddress = function () {
-        return bech32_1.bech32.encode('jmespub', bech32_1.bech32.toWords(this.encodeAminoPubkey()));
-    };
-    return SimplePublicKey;
-}(json_1.JSONSerializable));
-exports.SimplePublicKey = SimplePublicKey;
-var LegacyAminoMultisigPublicKey = /** @class */ (function (_super) {
-    __extends(LegacyAminoMultisigPublicKey, _super);
-    function LegacyAminoMultisigPublicKey(threshold, pubkeys) {
-        var _this = _super.call(this) || this;
-        _this.threshold = threshold;
-        _this.pubkeys = pubkeys;
-        return _this;
     }
-    LegacyAminoMultisigPublicKey.prototype.encodeAminoPubkey = function () {
-        var out = Array.from(pubkeyAminoPrefixMultisigThreshold);
+    rawAddress() {
+        const pubkeyData = Buffer.from(this.key, 'base64');
+        return (0, hash_1.ripemd160)((0, hash_1.sha256)(pubkeyData));
+    }
+    address() {
+        return bech32_1.bech32.encode('jmes', bech32_1.bech32.toWords(this.rawAddress()));
+    }
+    pubkeyAddress() {
+        return bech32_1.bech32.encode('jmespub', bech32_1.bech32.toWords(this.encodeAminoPubkey()));
+    }
+}
+exports.SimplePublicKey = SimplePublicKey;
+class LegacyAminoMultisigPublicKey extends json_1.JSONSerializable {
+    constructor(threshold, pubkeys) {
+        super();
+        this.threshold = threshold;
+        this.pubkeys = pubkeys;
+    }
+    encodeAminoPubkey() {
+        const out = Array.from(pubkeyAminoPrefixMultisigThreshold);
         out.push(0x08);
-        out.push.apply(out, encodeUvarint(this.threshold));
-        for (var _i = 0, _a = this.pubkeys.map(function (p) { return p.encodeAminoPubkey(); }); _i < _a.length; _i++) {
-            var pubkeyData = _a[_i];
+        out.push(...encodeUvarint(this.threshold));
+        for (const pubkeyData of this.pubkeys.map(p => p.encodeAminoPubkey())) {
             out.push(0x12);
-            out.push.apply(out, encodeUvarint(pubkeyData.length));
-            out.push.apply(out, Array.from(pubkeyData));
+            out.push(...encodeUvarint(pubkeyData.length));
+            out.push(...Array.from(pubkeyData));
         }
         return new Uint8Array(out);
-    };
-    LegacyAminoMultisigPublicKey.prototype.rawAddress = function () {
-        var pubkeyData = this.encodeAminoPubkey();
+    }
+    rawAddress() {
+        const pubkeyData = this.encodeAminoPubkey();
         return (0, hash_1.sha256)(pubkeyData).slice(0, 20);
-    };
-    LegacyAminoMultisigPublicKey.prototype.address = function () {
+    }
+    address() {
         return bech32_1.bech32.encode('jmes', bech32_1.bech32.toWords(this.rawAddress()));
-    };
-    LegacyAminoMultisigPublicKey.prototype.pubkeyAddress = function () {
+    }
+    pubkeyAddress() {
         return bech32_1.bech32.encode('jmespub', bech32_1.bech32.toWords(this.encodeAminoPubkey()));
-    };
-    LegacyAminoMultisigPublicKey.fromAmino = function (data) {
-        return new LegacyAminoMultisigPublicKey(Number.parseInt(data.value.threshold), data.value.pubkeys.map(function (p) { return SimplePublicKey.fromAmino(p); }));
-    };
-    LegacyAminoMultisigPublicKey.prototype.toAmino = function () {
+    }
+    static fromAmino(data) {
+        return new LegacyAminoMultisigPublicKey(Number.parseInt(data.value.threshold), data.value.pubkeys.map(p => SimplePublicKey.fromAmino(p)));
+    }
+    toAmino() {
         return {
             type: 'tendermint/PubKeyMultisigThreshold',
             value: {
                 threshold: this.threshold.toFixed(),
-                pubkeys: this.pubkeys.map(function (p) { return p.toAmino(); }),
+                pubkeys: this.pubkeys.map(p => p.toAmino()),
             },
         };
-    };
-    LegacyAminoMultisigPublicKey.fromData = function (data) {
-        return new LegacyAminoMultisigPublicKey(Number.parseInt(data.threshold), data.public_keys.map(function (v) { return SimplePublicKey.fromData(v); }));
-    };
-    LegacyAminoMultisigPublicKey.prototype.toData = function () {
+    }
+    static fromData(data) {
+        return new LegacyAminoMultisigPublicKey(Number.parseInt(data.threshold), data.public_keys.map(v => SimplePublicKey.fromData(v)));
+    }
+    toData() {
         return {
             '@type': '/cosmos.crypto.multisig.LegacyAminoPubKey',
             threshold: this.threshold.toFixed(),
-            public_keys: this.pubkeys.map(function (p) { return p.toData(); }),
+            public_keys: this.pubkeys.map(p => p.toData()),
         };
-    };
-    LegacyAminoMultisigPublicKey.fromProto = function (pubkeyProto) {
-        return new LegacyAminoMultisigPublicKey(pubkeyProto.threshold, pubkeyProto.publicKeys.map(function (v) { return SimplePublicKey.unpackAny(v); }));
-    };
-    LegacyAminoMultisigPublicKey.prototype.toProto = function () {
+    }
+    static fromProto(pubkeyProto) {
+        return new LegacyAminoMultisigPublicKey(pubkeyProto.threshold, pubkeyProto.publicKeys.map(v => SimplePublicKey.unpackAny(v)));
+    }
+    toProto() {
         return keys_1.LegacyAminoPubKey.fromPartial({
             threshold: this.threshold,
-            publicKeys: this.pubkeys.map(function (v) { return v.packAny(); }),
+            publicKeys: this.pubkeys.map(v => v.packAny()),
         });
-    };
-    LegacyAminoMultisigPublicKey.prototype.packAny = function () {
+    }
+    packAny() {
         return any_1.Any.fromPartial({
             typeUrl: '/cosmos.crypto.multisig.LegacyAminoPubKey',
             value: keys_1.LegacyAminoPubKey.encode(this.toProto()).finish(),
         });
-    };
-    LegacyAminoMultisigPublicKey.unpackAny = function (pubkeyAny) {
-        return LegacyAminoMultisigPublicKey.fromProto(keys_1.LegacyAminoPubKey.decode(pubkeyAny.value));
-    };
-    return LegacyAminoMultisigPublicKey;
-}(json_1.JSONSerializable));
-exports.LegacyAminoMultisigPublicKey = LegacyAminoMultisigPublicKey;
-var ValConsPublicKey = /** @class */ (function (_super) {
-    __extends(ValConsPublicKey, _super);
-    function ValConsPublicKey(key) {
-        var _this = _super.call(this) || this;
-        _this.key = key;
-        return _this;
     }
-    ValConsPublicKey.fromAmino = function (data) {
+    static unpackAny(pubkeyAny) {
+        return LegacyAminoMultisigPublicKey.fromProto(keys_1.LegacyAminoPubKey.decode(pubkeyAny.value));
+    }
+}
+exports.LegacyAminoMultisigPublicKey = LegacyAminoMultisigPublicKey;
+class ValConsPublicKey extends json_1.JSONSerializable {
+    constructor(key) {
+        super();
+        this.key = key;
+    }
+    static fromAmino(data) {
         return new ValConsPublicKey(data.value);
-    };
-    ValConsPublicKey.prototype.toAmino = function () {
+    }
+    toAmino() {
         return {
             type: 'tendermint/PubKeyEd25519',
             value: this.key,
         };
-    };
-    ValConsPublicKey.fromData = function (data) {
+    }
+    static fromData(data) {
         return new ValConsPublicKey(data.key);
-    };
-    ValConsPublicKey.prototype.toData = function () {
+    }
+    toData() {
         return {
             '@type': '/cosmos.crypto.ed25519.PubKey',
             key: this.key,
         };
-    };
-    ValConsPublicKey.fromProto = function (pubkeyProto) {
+    }
+    static fromProto(pubkeyProto) {
         return new ValConsPublicKey(Buffer.from(pubkeyProto.key).toString('base64'));
-    };
-    ValConsPublicKey.prototype.toProto = function () {
+    }
+    toProto() {
         return keys_2.PubKey.fromPartial({
             key: Buffer.from(this.key, 'base64'),
         });
-    };
-    ValConsPublicKey.prototype.packAny = function () {
+    }
+    packAny() {
         return any_1.Any.fromPartial({
             typeUrl: '/cosmos.crypto.ed25519.PubKey',
             value: keys_3.PubKey.encode(this.toProto()).finish(),
         });
-    };
-    ValConsPublicKey.unpackAny = function (pubkeyAny) {
+    }
+    static unpackAny(pubkeyAny) {
         return ValConsPublicKey.fromProto(keys_3.PubKey.decode(pubkeyAny.value));
-    };
-    ValConsPublicKey.prototype.encodeAminoPubkey = function () {
+    }
+    encodeAminoPubkey() {
         return Buffer.concat([
             pubkeyAminoPrefixEd25519,
             Buffer.from(this.key, 'base64'),
         ]);
-    };
-    ValConsPublicKey.prototype.rawAddress = function () {
-        var pubkeyData = Buffer.from(this.key, 'base64');
+    }
+    rawAddress() {
+        const pubkeyData = Buffer.from(this.key, 'base64');
         return (0, hash_1.sha256)(pubkeyData).slice(0, 20);
-    };
-    ValConsPublicKey.prototype.address = function () {
+    }
+    address() {
         return bech32_1.bech32.encode('jmesvalcons', bech32_1.bech32.toWords(this.rawAddress()));
-    };
-    ValConsPublicKey.prototype.pubkeyAddress = function () {
+    }
+    pubkeyAddress() {
         return bech32_1.bech32.encode('jmesvalconspub', bech32_1.bech32.toWords(this.encodeAminoPubkey()));
-    };
-    return ValConsPublicKey;
-}(json_1.JSONSerializable));
+    }
+}
 exports.ValConsPublicKey = ValConsPublicKey;
 //# sourceMappingURL=PublicKey.js.map

@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,23 +24,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Proposal = void 0;
-var Coins_1 = require("../Coins");
-var numeric_1 = require("../numeric");
-var json_1 = require("../../util/json");
-var proposals_1 = require("../distribution/proposals");
-var proposals_2 = require("../params/proposals");
-var proposals_3 = require("../ibc/proposals");
-var proposals_4 = require("./proposals");
-var proposals_5 = require("../upgrade/proposals");
-var proposals_6 = require("../wasm/proposals");
-var gov_1 = require("@terra-money/terra.proto/cosmos/gov/v1beta1/gov");
-var Long = __importStar(require("long"));
+const Coins_1 = require("../Coins");
+const numeric_1 = require("../numeric");
+const json_1 = require("../../util/json");
+const proposals_1 = require("../distribution/proposals");
+const proposals_2 = require("../params/proposals");
+const proposals_3 = require("../ibc/proposals");
+const proposals_4 = require("./proposals");
+const proposals_5 = require("../upgrade/proposals");
+const proposals_6 = require("../wasm/proposals");
+const gov_1 = require("@terra-money/terra.proto/cosmos/gov/v1beta1/gov");
+const Long = __importStar(require("long"));
 /**
  * Stores information pertaining to a submitted proposal, such as its status and time of
  * the voting period
  */
-var Proposal = /** @class */ (function (_super) {
-    __extends(Proposal, _super);
+class Proposal extends json_1.JSONSerializable {
     /**
      *
      * @param id proposal's ID
@@ -68,30 +52,29 @@ var Proposal = /** @class */ (function (_super) {
      * @param voting_start_time time voting period will start
      * @param voting_end_time time voting period will end
      */
-    function Proposal(id, content, status, final_tally_result, submit_time, deposit_end_time, total_deposit, voting_start_time, voting_end_time) {
-        var _this = _super.call(this) || this;
-        _this.id = id;
-        _this.content = content;
-        _this.status = status;
-        _this.final_tally_result = final_tally_result;
-        _this.submit_time = submit_time;
-        _this.deposit_end_time = deposit_end_time;
-        _this.total_deposit = total_deposit;
-        _this.voting_start_time = voting_start_time;
-        _this.voting_end_time = voting_end_time;
-        return _this;
+    constructor(id, content, status, final_tally_result, submit_time, deposit_end_time, total_deposit, voting_start_time, voting_end_time) {
+        super();
+        this.id = id;
+        this.content = content;
+        this.status = status;
+        this.final_tally_result = final_tally_result;
+        this.submit_time = submit_time;
+        this.deposit_end_time = deposit_end_time;
+        this.total_deposit = total_deposit;
+        this.voting_start_time = voting_start_time;
+        this.voting_end_time = voting_end_time;
     }
-    Proposal.fromAmino = function (data, isClassic) {
-        var id = data.id, content = data.content, status = data.status, final_tally_result = data.final_tally_result, submit_time = data.submit_time, deposit_end_time = data.deposit_end_time, total_deposit = data.total_deposit, voting_start_time = data.voting_start_time, voting_end_time = data.voting_end_time;
+    static fromAmino(data, isClassic) {
+        const { id, content, status, final_tally_result, submit_time, deposit_end_time, total_deposit, voting_start_time, voting_end_time, } = data;
         return new Proposal(Number.parseInt(id), Proposal.Content.fromAmino(content, isClassic), status, {
             yes: new numeric_1.Int(final_tally_result.yes || 0),
             no: new numeric_1.Int(final_tally_result.no || 0),
             abstain: new numeric_1.Int(final_tally_result.abstain || 0),
             no_with_veto: new numeric_1.Int(final_tally_result.no_with_veto || 0),
         }, new Date(submit_time), new Date(deposit_end_time), Coins_1.Coins.fromAmino(total_deposit), new Date(voting_start_time), new Date(voting_end_time));
-    };
-    Proposal.prototype.toAmino = function (isClassic) {
-        var _a = this, status = _a.status, final_tally_result = _a.final_tally_result;
+    }
+    toAmino(isClassic) {
+        const { status, final_tally_result } = this;
         return {
             id: this.id.toFixed(),
             content: this.content.toAmino(isClassic),
@@ -108,18 +91,18 @@ var Proposal = /** @class */ (function (_super) {
             voting_start_time: this.voting_start_time.toISOString(),
             voting_end_time: this.voting_end_time.toISOString(),
         };
-    };
-    Proposal.fromData = function (data, isClassic) {
-        var proposal_id = data.proposal_id, content = data.content, status = data.status, final_tally_result = data.final_tally_result, submit_time = data.submit_time, deposit_end_time = data.deposit_end_time, total_deposit = data.total_deposit, voting_start_time = data.voting_start_time, voting_end_time = data.voting_end_time;
+    }
+    static fromData(data, isClassic) {
+        const { proposal_id, content, status, final_tally_result, submit_time, deposit_end_time, total_deposit, voting_start_time, voting_end_time, } = data;
         return new Proposal(Number.parseInt(proposal_id), Proposal.Content.fromData(content, isClassic), (0, gov_1.proposalStatusFromJSON)(status), {
             yes: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.yes) || 0),
             no: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.no) || 0),
             abstain: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.abstain) || 0),
             no_with_veto: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.no_with_veto) || 0),
         }, new Date(submit_time), new Date(deposit_end_time), Coins_1.Coins.fromData(total_deposit), new Date(voting_start_time), new Date(voting_end_time));
-    };
-    Proposal.prototype.toData = function (isClassic) {
-        var _a = this, status = _a.status, final_tally_result = _a.final_tally_result;
+    }
+    toData(isClassic) {
+        const { status, final_tally_result } = this;
         return {
             proposal_id: this.id.toFixed(),
             content: this.content.toData(isClassic),
@@ -136,27 +119,27 @@ var Proposal = /** @class */ (function (_super) {
             voting_start_time: this.voting_start_time.toISOString(),
             voting_end_time: this.voting_end_time.toISOString(),
         };
-    };
-    Proposal.fromProto = function (data, isClassic) {
-        var id = data.proposalId;
-        var content = data.content;
-        var status = data.status;
-        var final_tally_result = data.finalTallyResult;
-        var submit_time = data.submitTime;
-        var deposit_end_time = data.depositEndTime;
-        var total_deposit = data.totalDeposit;
-        var voting_start_time = data.votingStartTime;
-        var voting_end_time = data.votingEndTime;
+    }
+    static fromProto(data, isClassic) {
+        const id = data.proposalId;
+        const content = data.content;
+        const status = data.status;
+        const final_tally_result = data.finalTallyResult;
+        const submit_time = data.submitTime;
+        const deposit_end_time = data.depositEndTime;
+        const total_deposit = data.totalDeposit;
+        const voting_start_time = data.votingStartTime;
+        const voting_end_time = data.votingEndTime;
         return new Proposal(id.toNumber(), Proposal.Content.fromProto(content, isClassic), status, {
             yes: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.yes) || 0),
             no: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.no) || 0),
             abstain: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.abstain) || 0),
             no_with_veto: new numeric_1.Int((final_tally_result === null || final_tally_result === void 0 ? void 0 : final_tally_result.noWithVeto) || 0),
         }, submit_time, deposit_end_time, Coins_1.Coins.fromProto(total_deposit), voting_start_time, voting_end_time);
-    };
-    Proposal.prototype.toProto = function (isClassic) {
-        var _a = this, status = _a.status, final_tally_result = _a.final_tally_result;
-        var ftr;
+    }
+    toProto(isClassic) {
+        const { status, final_tally_result } = this;
+        let ftr;
         if (final_tally_result) {
             ftr = gov_1.TallyResult.fromPartial({
                 yes: final_tally_result.yes.toString(),
@@ -168,7 +151,7 @@ var Proposal = /** @class */ (function (_super) {
         return gov_1.Proposal.fromPartial({
             proposalId: Long.fromNumber(this.id),
             content: this.content.packAny(isClassic),
-            status: status,
+            status,
             finalTallyResult: ftr,
             submitTime: this.submit_time,
             depositEndTime: this.deposit_end_time,
@@ -176,13 +159,12 @@ var Proposal = /** @class */ (function (_super) {
             votingEndTime: this.voting_end_time,
             votingStartTime: this.voting_start_time,
         });
-    };
-    return Proposal;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Proposal = Proposal;
 (function (Proposal) {
     Proposal.Status = gov_1.ProposalStatus;
-    var Content;
+    let Content;
     (function (Content) {
         function fromAmino(amino, isClassic) {
             switch (amino.type) {
@@ -264,7 +246,7 @@ exports.Proposal = Proposal;
         }
         Content.fromData = fromData;
         function fromProto(anyProto, isClassic) {
-            var typeUrl = anyProto.typeUrl;
+            const typeUrl = anyProto.typeUrl;
             switch (typeUrl) {
                 case '/cosmos.gov.v1beta1.TextProposal':
                     return proposals_4.TextProposal.unpackAny(anyProto, isClassic);
@@ -299,10 +281,9 @@ exports.Proposal = Proposal;
                 case '/cosmwasm.wasm.v1.UpdateInstantiateConfigProposal':
                     return proposals_6.UpdateInstantiateConfigProposal.unpackAny(anyProto, isClassic);
             }
-            throw "Proposal content ".concat(typeUrl, " not recognized");
+            throw `Proposal content ${typeUrl} not recognized`;
         }
         Content.fromProto = fromProto;
     })(Content = Proposal.Content || (Proposal.Content = {}));
 })(Proposal = exports.Proposal || (exports.Proposal = {}));
-exports.Proposal = Proposal;
 //# sourceMappingURL=Proposal.js.map

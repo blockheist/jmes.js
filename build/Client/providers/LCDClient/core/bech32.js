@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValConsAddress = exports.ValPubKey = exports.ValAddress = exports.AccPubKey = exports.AccAddress = void 0;
-var bech32_1 = require("bech32");
+const bech32_1 = require("bech32");
 function checkPrefixAndLength(prefix, data, length) {
     try {
-        var vals = bech32_1.bech32.decode(data);
+        const vals = bech32_1.bech32.decode(data);
         return vals.prefix === prefix && data.length == length;
     }
     catch (e) {
@@ -30,7 +30,7 @@ var AccAddress;
      * @param address validator address
      */
     function fromValAddress(address) {
-        var vals = bech32_1.bech32.decode(address);
+        const vals = bech32_1.bech32.decode(address);
         return bech32_1.bech32.encode('jmes', vals.words);
     }
     AccAddress.fromValAddress = fromValAddress;
@@ -50,7 +50,7 @@ var AccPubKey;
      * @param address validator pubkey to convert
      */
     function fromAccAddress(address) {
-        var vals = bech32_1.bech32.decode(address);
+        const vals = bech32_1.bech32.decode(address);
         return bech32_1.bech32.encode('jmespub', vals.words);
     }
     AccPubKey.fromAccAddress = fromAccAddress;
@@ -71,7 +71,7 @@ var ValAddress;
      * @param address account address to convert
      */
     function fromAccAddress(address) {
-        var vals = bech32_1.bech32.decode(address);
+        const vals = bech32_1.bech32.decode(address);
         return bech32_1.bech32.encode('jmesvaloper', vals.words);
     }
     ValAddress.fromAccAddress = fromAccAddress;
@@ -91,7 +91,7 @@ var ValPubKey;
      * @param valAddress account pubkey
      */
     function fromValAddress(valAddress) {
-        var vals = bech32_1.bech32.decode(valAddress);
+        const vals = bech32_1.bech32.decode(valAddress);
         return bech32_1.bech32.encode('jmesvaloperpub', vals.words);
     }
     ValPubKey.fromValAddress = fromValAddress;

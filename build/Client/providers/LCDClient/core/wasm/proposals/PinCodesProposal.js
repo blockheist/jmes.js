@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,67 +24,65 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PinCodesProposal = void 0;
-var json_1 = require("../../../util/json");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
-var Long = __importStar(require("long"));
+const json_1 = require("../../../util/json");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
+const Long = __importStar(require("long"));
 /**
  * PinCodesProposal gov proposal content type to pin a set of code ids in the
  * wasmvm cache.
  */
-var PinCodesProposal = /** @class */ (function (_super) {
-    __extends(PinCodesProposal, _super);
+class PinCodesProposal extends json_1.JSONSerializable {
     /**
      * @param title a short summary
      * @param description a human readable text
      * @param code_ids the address of the smart code_ids
      */
-    function PinCodesProposal(title, description, code_ids) {
-        var _this = _super.call(this) || this;
-        _this.title = title;
-        _this.description = description;
-        _this.code_ids = code_ids;
-        return _this;
+    constructor(title, description, code_ids) {
+        super();
+        this.title = title;
+        this.description = description;
+        this.code_ids = code_ids;
     }
-    PinCodesProposal.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data.value, title = _a.title, description = _a.description, code_ids = _a.code_ids;
-        return new PinCodesProposal(title, description, code_ids.map(function (cid) { return Number.parseInt(cid); }));
-    };
-    PinCodesProposal.prototype.toAmino = function (isClassic) {
+        const { value: { title, description, code_ids }, } = data;
+        return new PinCodesProposal(title, description, code_ids.map(cid => Number.parseInt(cid)));
+    }
+    toAmino(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, code_ids = _a.code_ids;
+        const { title, description, code_ids } = this;
         return {
             type: 'wasm/PinCodesProposal',
             value: {
-                title: title,
-                description: description,
-                code_ids: code_ids.map(function (cid) { return cid.toFixed(); }),
+                title,
+                description,
+                code_ids: code_ids.map(cid => cid.toFixed()),
             },
         };
-    };
-    PinCodesProposal.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        return new PinCodesProposal(proto.title, proto.description, proto.codeIds.map(function (codeId) { return codeId.toNumber(); }));
-    };
-    PinCodesProposal.prototype.toProto = function (isClassic) {
+        return new PinCodesProposal(proto.title, proto.description, proto.codeIds.map(codeId => codeId.toNumber()));
+    }
+    toProto(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, code_ids = _a.code_ids;
+        const { title, description, code_ids } = this;
         return proposal_1.PinCodesProposal.fromPartial({
-            title: title,
-            description: description,
-            codeIds: code_ids.map(function (cid) { return Long.fromNumber(cid); }),
+            title,
+            description,
+            codeIds: code_ids.map(cid => Long.fromNumber(cid)),
         });
-    };
-    PinCodesProposal.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -107,33 +90,32 @@ var PinCodesProposal = /** @class */ (function (_super) {
             typeUrl: '/cosmwasm.wasm.v1.PinCodesProposal',
             value: proposal_1.PinCodesProposal.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    PinCodesProposal.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return PinCodesProposal.fromProto(proposal_1.PinCodesProposal.decode(msgAny.value), isClassic);
-    };
-    PinCodesProposal.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data, title = _a.title, description = _a.description, code_ids = _a.code_ids;
-        return new PinCodesProposal(title, description, code_ids.map(function (cid) { return Number.parseInt(cid); }));
-    };
-    PinCodesProposal.prototype.toData = function (isClassic) {
+        const { title, description, code_ids } = data;
+        return new PinCodesProposal(title, description, code_ids.map(cid => Number.parseInt(cid)));
+    }
+    toData(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, code_ids = _a.code_ids;
+        const { title, description, code_ids } = this;
         return {
             '@type': '/cosmwasm.wasm.v1.PinCodesProposal',
-            title: title,
-            description: description,
-            code_ids: code_ids.map(function (cid) { return cid.toFixed(); }),
+            title,
+            description,
+            code_ids: code_ids.map(cid => cid.toFixed()),
         };
-    };
-    return PinCodesProposal;
-}(json_1.JSONSerializable));
+    }
+}
 exports.PinCodesProposal = PinCodesProposal;
 //# sourceMappingURL=PinCodesProposal.js.map

@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,125 +24,118 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WeightedVoteOption = exports.Vote = void 0;
-var json_1 = require("../../util/json");
-var gov_1 = require("@terra-money/terra.proto/cosmos/gov/v1beta1/gov");
-var numeric_1 = require("../numeric");
-var Long = __importStar(require("long"));
+const json_1 = require("../../util/json");
+const gov_1 = require("@terra-money/terra.proto/cosmos/gov/v1beta1/gov");
+const numeric_1 = require("../numeric");
+const Long = __importStar(require("long"));
 /**
  * Stores vote information for a proposal
  */
-var Vote = /** @class */ (function (_super) {
-    __extends(Vote, _super);
+class Vote extends json_1.JSONSerializable {
     /**
      * @param proposal_id ID of proposal to vote on
      * @param voter voter's account address
      * @param options voting options
      */
-    function Vote(proposal_id, voter, options) {
-        var _this = _super.call(this) || this;
-        _this.proposal_id = proposal_id;
-        _this.voter = voter;
-        _this.options = options;
-        _this.Option = gov_1.VoteOption;
-        return _this;
+    constructor(proposal_id, voter, options) {
+        super();
+        this.proposal_id = proposal_id;
+        this.voter = voter;
+        this.options = options;
+        this.Option = gov_1.VoteOption;
     }
-    Vote.fromAmino = function (data, _) {
+    static fromAmino(data, _) {
         _;
-        var proposal_id = data.proposal_id, voter = data.voter, options = data.options;
-        return new Vote(Number.parseInt(proposal_id), voter, options.map(function (v) { return WeightedVoteOption.fromAmino(v); }));
-    };
-    Vote.prototype.toAmino = function (_) {
+        const { proposal_id, voter, options } = data;
+        return new Vote(Number.parseInt(proposal_id), voter, options.map(v => WeightedVoteOption.fromAmino(v)));
+    }
+    toAmino(_) {
         _;
-        var _a = this, proposal_id = _a.proposal_id, voter = _a.voter, options = _a.options;
-        var res = {
+        const { proposal_id, voter, options } = this;
+        const res = {
             proposal_id: proposal_id.toFixed(),
-            voter: voter,
-            options: options.map(function (v) { return v.toAmino(); }),
+            voter,
+            options: options.map(v => v.toAmino()),
         };
         return res;
-    };
-    Vote.fromData = function (data, _) {
+    }
+    static fromData(data, _) {
         _;
-        var proposal_id = data.proposal_id, voter = data.voter, options = data.options;
-        return new Vote(Number.parseInt(proposal_id), voter, options.map(function (v) { return WeightedVoteOption.fromData(v); }));
-    };
-    Vote.prototype.toData = function (_) {
+        const { proposal_id, voter, options } = data;
+        return new Vote(Number.parseInt(proposal_id), voter, options.map(v => WeightedVoteOption.fromData(v)));
+    }
+    toData(_) {
         _;
-        var _a = this, proposal_id = _a.proposal_id, voter = _a.voter, options = _a.options;
-        var res = {
+        const { proposal_id, voter, options } = this;
+        const res = {
             proposal_id: proposal_id.toFixed(),
-            voter: voter,
-            options: options.map(function (v) { return v.toData(); }),
+            voter,
+            options: options.map(v => v.toData()),
         };
         return res;
-    };
-    Vote.fromProto = function (proto, _) {
+    }
+    static fromProto(proto, _) {
         _;
-        return new Vote(proto.proposalId.toNumber(), proto.voter, proto.options.map(function (o) { return WeightedVoteOption.fromProto(o); }));
-    };
-    Vote.prototype.toProto = function (_) {
+        return new Vote(proto.proposalId.toNumber(), proto.voter, proto.options.map(o => WeightedVoteOption.fromProto(o)));
+    }
+    toProto(_) {
         _;
-        var _a = this, proposal_id = _a.proposal_id, voter = _a.voter, options = _a.options;
+        const { proposal_id, voter, options } = this;
         return gov_1.Vote.fromPartial({
-            options: options.map(function (o) { return o.toProto(); }),
+            options: options.map(o => o.toProto()),
             proposalId: Long.fromNumber(proposal_id),
-            voter: voter,
+            voter,
         });
-    };
-    return Vote;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Vote = Vote;
 (function (Vote) {
     Vote.Option = gov_1.VoteOption;
 })(Vote = exports.Vote || (exports.Vote = {}));
-exports.Vote = Vote;
-var WeightedVoteOption = /** @class */ (function (_super) {
-    __extends(WeightedVoteOption, _super);
-    function WeightedVoteOption(option, weight) {
-        var _this = _super.call(this) || this;
-        _this.option = option;
-        _this.weight = new numeric_1.Dec(weight);
-        return _this;
+class WeightedVoteOption extends json_1.JSONSerializable {
+    constructor(option, weight) {
+        super();
+        this.option = option;
+        this.weight = new numeric_1.Dec(weight);
     }
-    WeightedVoteOption.fromAmino = function (data, _) {
+    static fromAmino(data, _) {
         _;
-        var option = data.option, weight = data.weight;
+        const { option, weight } = data;
         return new WeightedVoteOption(option, weight);
-    };
-    WeightedVoteOption.prototype.toAmino = function (_) {
+    }
+    toAmino(_) {
         _;
-        var _a = this, option = _a.option, weight = _a.weight;
+        const { option, weight } = this;
         return {
-            option: option,
+            option,
             weight: weight.toString(),
         };
-    };
-    WeightedVoteOption.fromData = function (data, _) {
+    }
+    static fromData(data, _) {
         _;
-        var option = data.option, weight = data.weight;
+        const { option, weight } = data;
         return new WeightedVoteOption(option, weight);
-    };
-    WeightedVoteOption.prototype.toData = function (_) {
+    }
+    toData(_) {
         _;
-        var _a = this, option = _a.option, weight = _a.weight;
+        const { option, weight } = this;
         return {
-            option: option,
+            option,
             weight: weight.toString(),
         };
-    };
-    WeightedVoteOption.fromProto = function (proto, _) {
+    }
+    static fromProto(proto, _) {
         _;
         return new WeightedVoteOption(proto.option, proto.weight);
-    };
-    WeightedVoteOption.prototype.toProto = function (_) {
+    }
+    toProto(_) {
         _;
-        var _a = this, option = _a.option, weight = _a.weight;
+        const { option, weight } = this;
         return gov_1.WeightedVoteOption.fromPartial({
-            option: option,
+            option,
             weight: weight.toString(),
         });
-    };
-    return WeightedVoteOption;
-}(json_1.JSONSerializable));
+    }
+}
 exports.WeightedVoteOption = WeightedVoteOption;
 //# sourceMappingURL=Vote.js.map

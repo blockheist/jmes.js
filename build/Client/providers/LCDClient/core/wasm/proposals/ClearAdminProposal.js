@@ -1,81 +1,64 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClearAdminProposal = void 0;
-var json_1 = require("../../../util/json");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
+const json_1 = require("../../../util/json");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 /**
  * ClearAdminProposal gov proposal content type to clear the admin of a
  * contract.
  */
-var ClearAdminProposal = /** @class */ (function (_super) {
-    __extends(ClearAdminProposal, _super);
+class ClearAdminProposal extends json_1.JSONSerializable {
     /**
      * @param title a short summary
      * @param description a human readable text
      * @param contract the address of the smart contract
      */
-    function ClearAdminProposal(title, description, contract) {
-        var _this = _super.call(this) || this;
-        _this.title = title;
-        _this.description = description;
-        _this.contract = contract;
-        return _this;
+    constructor(title, description, contract) {
+        super();
+        this.title = title;
+        this.description = description;
+        this.contract = contract;
     }
-    ClearAdminProposal.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data.value, title = _a.title, description = _a.description, contract = _a.contract;
+        const { value: { title, description, contract }, } = data;
         return new ClearAdminProposal(title, description, contract);
-    };
-    ClearAdminProposal.prototype.toAmino = function (isClassic) {
+    }
+    toAmino(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract;
+        const { title, description, contract } = this;
         return {
             type: 'wasm/ClearAdminProposal',
             value: {
-                title: title,
-                description: description,
-                contract: contract,
+                title,
+                description,
+                contract,
             },
         };
-    };
-    ClearAdminProposal.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return new ClearAdminProposal(proto.title, proto.description, proto.contract);
-    };
-    ClearAdminProposal.prototype.toProto = function (isClassic) {
+    }
+    toProto(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract;
+        const { title, description, contract } = this;
         return proposal_1.ClearAdminProposal.fromPartial({
-            title: title,
-            description: description,
-            contract: contract,
+            title,
+            description,
+            contract,
         });
-    };
-    ClearAdminProposal.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -83,33 +66,32 @@ var ClearAdminProposal = /** @class */ (function (_super) {
             typeUrl: '/cosmwasm.wasm.v1.ClearAdminProposal',
             value: proposal_1.ClearAdminProposal.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    ClearAdminProposal.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return ClearAdminProposal.fromProto(proposal_1.ClearAdminProposal.decode(msgAny.value), isClassic);
-    };
-    ClearAdminProposal.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data, title = _a.title, description = _a.description, contract = _a.contract;
+        const { title, description, contract } = data;
         return new ClearAdminProposal(title, description, contract);
-    };
-    ClearAdminProposal.prototype.toData = function (isClassic) {
+    }
+    toData(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract;
+        const { title, description, contract } = this;
         return {
             '@type': '/cosmwasm.wasm.v1.ClearAdminProposal',
-            title: title,
-            description: description,
-            contract: contract,
+            title,
+            description,
+            contract,
         };
-    };
-    return ClearAdminProposal;
-}(json_1.JSONSerializable));
+    }
+}
 exports.ClearAdminProposal = ClearAdminProposal;
 //# sourceMappingURL=ClearAdminProposal.js.map

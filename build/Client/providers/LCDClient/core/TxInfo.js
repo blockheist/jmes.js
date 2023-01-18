@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TxLog = exports.EventsByType = exports.TxInfo = void 0;
-var Tx_1 = require("./Tx");
-var abci_1 = require("@jmesworld/jmes.proto/src/cosmos/base/abci/v1beta1/abci");
+const Tx_1 = require("./Tx");
+const abci_1 = require("@jmesworld/jmes.proto/src/cosmos/base/abci/v1beta1/abci");
 /**
  * A TxInfo data structure is used to capture information from a transaction lookup for
  * a transaction already included in a block
  */
-var TxInfo = /** @class */ (function () {
+class TxInfo {
     /**
      *
      * @param height height of the block in which the transaction was included.
@@ -20,7 +20,7 @@ var TxInfo = /** @class */ (function () {
      * @param timestamp time of inclusion
      * @param code error code
      */
-    function TxInfo(height, txhash, raw_log, logs, gas_wanted, gas_used, tx, timestamp, code, codespace) {
+    constructor(height, txhash, raw_log, logs, gas_wanted, gas_used, tx, timestamp, code, codespace) {
         this.height = height;
         this.txhash = txhash;
         this.raw_log = raw_log;
@@ -32,21 +32,20 @@ var TxInfo = /** @class */ (function () {
         this.code = code;
         this.codespace = codespace;
     }
-    TxInfo.fromProto = function (proto) {
-        return new TxInfo(proto.height.toNumber(), proto.txhash, proto.rawLog, proto.logs.map(function (log) { return TxLog.fromProto(log); }), proto.gasWanted.toNumber(), proto.gasUsed.toNumber(), Tx_1.Tx.unpackAny(proto.tx), proto.timestamp, proto.code, proto.codespace);
-    };
-    TxInfo.fromData = function (data, isClassic) {
-        return new TxInfo(Number.parseInt(data.height), data.txhash, data.raw_log, data.logs.map(function (log) { return TxLog.fromData(log); }), Number.parseInt(data.gas_wanted), Number.parseInt(data.gas_used), Tx_1.Tx.fromData(data.tx, isClassic), data.timestamp, data.code, data.codespace);
-    };
-    return TxInfo;
-}());
+    static fromProto(proto) {
+        return new TxInfo(proto.height.toNumber(), proto.txhash, proto.rawLog, proto.logs.map(log => TxLog.fromProto(log)), proto.gasWanted.toNumber(), proto.gasUsed.toNumber(), Tx_1.Tx.unpackAny(proto.tx), proto.timestamp, proto.code, proto.codespace);
+    }
+    static fromData(data, isClassic) {
+        return new TxInfo(Number.parseInt(data.height), data.txhash, data.raw_log, data.logs.map(log => TxLog.fromData(log)), Number.parseInt(data.gas_wanted), Number.parseInt(data.gas_used), Tx_1.Tx.fromData(data.tx, isClassic), data.timestamp, data.code, data.codespace);
+    }
+}
 exports.TxInfo = TxInfo;
 var EventsByType;
 (function (EventsByType) {
     function parse(eventAmino) {
-        var events = {};
-        eventAmino.forEach(function (ev) {
-            ev.attributes.forEach(function (attr) {
+        const events = {};
+        eventAmino.forEach(ev => {
+            ev.attributes.forEach(attr => {
                 if (!(ev.type in events)) {
                     events[ev.type] = {};
                 }
@@ -60,18 +59,18 @@ var EventsByType;
     }
     EventsByType.parse = parse;
 })(EventsByType = exports.EventsByType || (exports.EventsByType = {}));
-var TxLog = /** @class */ (function () {
-    function TxLog(msg_index, log, events) {
+class TxLog {
+    constructor(msg_index, log, events) {
         this.msg_index = msg_index;
         this.log = log;
         this.events = events;
         this.eventsByType = EventsByType.parse(this.events);
     }
-    TxLog.fromData = function (data) {
-        return new TxLog(data.msg_index, data.log, data.events.map(function (e) {
+    static fromData(data) {
+        return new TxLog(data.msg_index, data.log, data.events.map(e => {
             return {
                 type: e.type,
-                attributes: e.attributes.map(function (attr) {
+                attributes: e.attributes.map(attr => {
                     return {
                         key: attr.key,
                         value: attr.value,
@@ -79,20 +78,20 @@ var TxLog = /** @class */ (function () {
                 }),
             };
         }));
-    };
-    TxLog.prototype.toData = function () {
-        var _a = this, msg_index = _a.msg_index, log = _a.log, events = _a.events;
+    }
+    toData() {
+        const { msg_index, log, events } = this;
         return {
-            msg_index: msg_index,
-            log: log,
-            events: events,
+            msg_index,
+            log,
+            events,
         };
-    };
-    TxLog.fromProto = function (proto) {
-        return new TxLog(proto.msgIndex, proto.log, proto.events.map(function (e) {
+    }
+    static fromProto(proto) {
+        return new TxLog(proto.msgIndex, proto.log, proto.events.map(e => {
             return {
                 type: e.type,
-                attributes: e.attributes.map(function (attr) {
+                attributes: e.attributes.map(attr => {
                     return {
                         key: attr.key,
                         value: attr.value,
@@ -100,16 +99,15 @@ var TxLog = /** @class */ (function () {
                 }),
             };
         }));
-    };
-    TxLog.prototype.toProto = function () {
-        var _a = this, msg_index = _a.msg_index, log = _a.log, events = _a.events;
+    }
+    toProto() {
+        const { msg_index, log, events } = this;
         return abci_1.ABCIMessageLog.fromPartial({
             msgIndex: msg_index,
             log: log,
-            events: events,
+            events,
         });
-    };
-    return TxLog;
-}());
+    }
+}
 exports.TxLog = TxLog;
 //# sourceMappingURL=TxInfo.js.map

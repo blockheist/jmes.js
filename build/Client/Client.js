@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
-var Wallet_1 = require("../primitives/Wallet");
-var MarketplaceAPI_1 = __importDefault(require("./providers/MarketplaceAPI/MarketplaceAPI"));
-var IdentityAPI_1 = __importDefault(require("./providers/IdentityAPI/IdentityAPI"));
-var FaucetAPI_1 = __importDefault(require("./providers/FaucetAPI/FaucetAPI"));
-var LCDClient_1 = require("./providers/LCDClient/lcd/LCDClient");
-var CONSTANTS_1 = require("../CONSTANTS");
-var Client = /** @class */ (function () {
-    function Client(config) {
+const Wallet_1 = require("../primitives/Wallet");
+const MarketplaceAPI_1 = __importDefault(require("./providers/MarketplaceAPI/MarketplaceAPI"));
+const IdentityAPI_1 = __importDefault(require("./providers/IdentityAPI/IdentityAPI"));
+const FaucetAPI_1 = __importDefault(require("./providers/FaucetAPI/FaucetAPI"));
+const LCDClient_1 = require("./providers/LCDClient/lcd/LCDClient");
+const CONSTANTS_1 = require("../CONSTANTS");
+class Client {
+    constructor(config) {
         var _a, _b, _c;
         // Specific provider to external services
         this.providers = {
@@ -21,23 +21,22 @@ var Client = /** @class */ (function () {
             LCDC: null
         };
     }
-    Client.prototype.createLCDClient = function (config) {
+    createLCDClient(config) {
         this.providers.LCDC = new LCDClient_1.LCDClient(config);
         return this.providers.LCDC;
-    };
-    Client.prototype.createWallet = function (key, lcdcUrl) {
+    }
+    createWallet(key, lcdcUrl) {
         // Where 8888 is specific JMES Path for mainnet.
         // jmes-888 in testnet
-        var bip44Path = "m/44'/".concat(CONSTANTS_1.JMES_COIN_TYPE, "'");
-        console.log("Generating a new wallet with key on BIP Path ".concat(bip44Path));
+        const bip44Path = `m/44'/${CONSTANTS_1.JMES_COIN_TYPE}'`;
+        console.log(`Generating a new wallet with key on BIP Path ${bip44Path}`);
         // If it's a mnemonic based key, we create a derivableKey first.
         // @ts-ignore
-        var derivableKey = (key.toMasterDerivableKey) ? key.toMasterDerivableKey() : key;
+        let derivableKey = (key.toMasterDerivableKey) ? key.toMasterDerivableKey() : key;
         // @ts-ignore
-        var chainDerivedKey = derivableKey.derivePath(bip44Path);
+        const chainDerivedKey = derivableKey.derivePath(bip44Path);
         return new Wallet_1.Wallet(chainDerivedKey, lcdcUrl);
-    };
-    return Client;
-}());
+    }
+}
 exports.Client = Client;
 //# sourceMappingURL=Client.js.map

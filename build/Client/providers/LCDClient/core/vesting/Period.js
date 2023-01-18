@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,66 +24,63 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Period = void 0;
-var Coins_1 = require("../Coins");
-var vesting_1 = require("@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting");
-var json_1 = require("../../util/json");
-var Long = __importStar(require("long"));
+const Coins_1 = require("../Coins");
+const vesting_1 = require("@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting");
+const json_1 = require("../../util/json");
+const Long = __importStar(require("long"));
 /**
  * Period defines a length of time and amount of coins that will vest.
  */
-var Period = /** @class */ (function (_super) {
-    __extends(Period, _super);
+class Period extends json_1.JSONSerializable {
     /**
      * @param length
      * @param amount
      */
-    function Period(length, amount) {
-        var _this = _super.call(this) || this;
-        _this.length = length;
-        _this.amount = new Coins_1.Coins(amount);
-        return _this;
+    constructor(length, amount) {
+        super();
+        this.length = length;
+        this.amount = new Coins_1.Coins(amount);
     }
-    Period.fromAmino = function (data, _) {
+    static fromAmino(data, _) {
         _;
-        var length = data.length, amount = data.amount;
+        const { length, amount } = data;
         return new Period(Number.parseInt(length), Coins_1.Coins.fromAmino(amount));
-    };
-    Period.prototype.toAmino = function (_) {
+    }
+    toAmino(_) {
         _;
-        var _a = this, length = _a.length, amount = _a.amount;
-        var res = {
+        const { length, amount } = this;
+        const res = {
             length: length.toFixed(),
             amount: amount.toAmino(),
         };
         return res;
-    };
-    Period.fromData = function (data, _) {
+    }
+    static fromData(data, _) {
         _;
-        var length = data.length, amount = data.amount;
+        const { length, amount } = data;
         return new Period(Number.parseInt(length), Coins_1.Coins.fromData(amount));
-    };
-    Period.prototype.toData = function (_) {
+    }
+    toData(_) {
         _;
-        var _a = this, length = _a.length, amount = _a.amount;
-        var res = {
+        const { length, amount } = this;
+        const res = {
             length: length.toFixed(),
             amount: amount.toData(),
         };
         return res;
-    };
-    Period.fromProto = function (proto, _) {
+    }
+    static fromProto(proto, _) {
         _;
         return new Period(proto.length.toNumber(), Coins_1.Coins.fromProto(proto.amount));
-    };
-    Period.prototype.toProto = function (_) {
+    }
+    toProto(_) {
         _;
-        var _a = this, length = _a.length, amount = _a.amount;
+        const { length, amount } = this;
         return vesting_1.Period.fromPartial({
             length: Long.fromNumber(length),
             amount: amount.toProto(),
         });
-    };
-    return Period;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Period = Period;
 //# sourceMappingURL=Period.js.map

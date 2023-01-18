@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,62 +24,59 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AggregateExchangeRatePrevote = void 0;
-var json_1 = require("../../util/json");
-var oracle_1 = require("@terra-money/legacy.proto/terra/oracle/v1beta1/oracle");
-var Long = __importStar(require("long"));
+const json_1 = require("../../util/json");
+const oracle_1 = require("@terra-money/legacy.proto/terra/oracle/v1beta1/oracle");
+const Long = __importStar(require("long"));
 /**
  * Stores information about data about Oracle aggregate prevotes fetched from the blockchain.
  */
-var AggregateExchangeRatePrevote = /** @class */ (function (_super) {
-    __extends(AggregateExchangeRatePrevote, _super);
+class AggregateExchangeRatePrevote extends json_1.JSONSerializable {
     /**
      * @param hash aggregate vote hash
      * @param voter validator
      * @param submit_block block during which aggregate prevote was submitted
      */
-    function AggregateExchangeRatePrevote(hash, voter, submit_block) {
-        var _this = _super.call(this) || this;
-        _this.hash = hash;
-        _this.voter = voter;
-        _this.submit_block = submit_block;
-        return _this;
+    constructor(hash, voter, submit_block) {
+        super();
+        this.hash = hash;
+        this.voter = voter;
+        this.submit_block = submit_block;
     }
-    AggregateExchangeRatePrevote.fromAmino = function (data) {
-        var hash = data.hash, voter = data.voter, submit_block = data.submit_block;
+    static fromAmino(data) {
+        const { hash, voter, submit_block } = data;
         return new AggregateExchangeRatePrevote(hash, voter, Number.parseInt(submit_block));
-    };
-    AggregateExchangeRatePrevote.prototype.toAmino = function () {
-        var _a = this, hash = _a.hash, voter = _a.voter, submit_block = _a.submit_block;
+    }
+    toAmino() {
+        const { hash, voter, submit_block } = this;
         return {
-            hash: hash,
-            voter: voter,
+            hash,
+            voter,
             submit_block: submit_block.toFixed(),
         };
-    };
-    AggregateExchangeRatePrevote.fromData = function (data) {
-        var hash = data.hash, voter = data.voter, submit_block = data.submit_block;
+    }
+    static fromData(data) {
+        const { hash, voter, submit_block } = data;
         return new AggregateExchangeRatePrevote(hash, voter, Number.parseInt(submit_block));
-    };
-    AggregateExchangeRatePrevote.prototype.toData = function () {
-        var _a = this, hash = _a.hash, voter = _a.voter, submit_block = _a.submit_block;
+    }
+    toData() {
+        const { hash, voter, submit_block } = this;
         return {
-            hash: hash,
-            voter: voter,
+            hash,
+            voter,
             submit_block: submit_block.toFixed(),
         };
-    };
-    AggregateExchangeRatePrevote.fromProto = function (data) {
+    }
+    static fromProto(data) {
         return new AggregateExchangeRatePrevote(data.hash, data.voter, data.submitBlock.toNumber());
-    };
-    AggregateExchangeRatePrevote.prototype.toProto = function () {
-        var _a = this, hash = _a.hash, voter = _a.voter, submit_block = _a.submit_block;
+    }
+    toProto() {
+        const { hash, voter, submit_block } = this;
         return oracle_1.AggregateExchangeRatePrevote.fromPartial({
-            hash: hash,
+            hash,
             submitBlock: Long.fromNumber(submit_block),
-            voter: voter,
+            voter,
         });
-    };
-    return AggregateExchangeRatePrevote;
-}(json_1.JSONSerializable));
+    }
+}
 exports.AggregateExchangeRatePrevote = AggregateExchangeRatePrevote;
 //# sourceMappingURL=AggregateExchangeRatePrevote.js.map

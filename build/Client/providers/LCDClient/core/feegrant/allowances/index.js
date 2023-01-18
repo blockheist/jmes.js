@@ -15,9 +15,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Allowance = void 0;
-var BasicAllowance_1 = require("./BasicAllowance");
-var PeriodicAllowance_1 = require("./PeriodicAllowance");
-var AllowedMsgAllowance_1 = require("./AllowedMsgAllowance");
+const BasicAllowance_1 = require("./BasicAllowance");
+const PeriodicAllowance_1 = require("./PeriodicAllowance");
+const AllowedMsgAllowance_1 = require("./AllowedMsgAllowance");
 __exportStar(require("./BasicAllowance"), exports);
 __exportStar(require("./PeriodicAllowance"), exports);
 __exportStar(require("./AllowedMsgAllowance"), exports);
@@ -57,7 +57,7 @@ var Allowance;
             case '/cosmos.feegrant.v1beta1.AllowedMsgAllowance':
                 return AllowedMsgAllowance_1.AllowedMsgAllowance.unpackAny(proto, isClassic);
         }
-        throw new Error("not supported allowance ".concat(proto.typeUrl));
+        throw new Error(`not supported allowance ${proto.typeUrl}`);
     }
     Allowance.fromProto = fromProto;
 })(Allowance = exports.Allowance || (exports.Allowance = {}));

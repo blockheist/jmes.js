@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertAccessTypeFromJSON = void 0;
-var types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
+const types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
 // core v2 returns human-friendly string like 'Everybody' by wasm/type/params.go
 // but accessTypeFromJSON requires "ACCESS_TYPE_EVERYBODY"
 // this function is a wrapper to get AccessType from JSON
 function convertAccessTypeFromJSON(accessType) {
-    var converted = accessType;
+    let converted = accessType;
     switch (accessType) {
         case 'Everybody':
             converted = 'ACCESS_TYPE_EVERYBODY';

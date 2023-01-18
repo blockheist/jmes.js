@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,14 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MsgInstantiateContract = void 0;
-var json_1 = require("../../../util/json");
-var Coins_1 = require("../../Coins");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var tx_1 = require("@terra-money/legacy.proto/terra/wasm/v1beta1/tx");
-var tx_2 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx");
-var Long = __importStar(require("long"));
-var MsgInstantiateContract = /** @class */ (function (_super) {
-    __extends(MsgInstantiateContract, _super);
+const json_1 = require("../../../util/json");
+const Coins_1 = require("../../Coins");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const tx_1 = require("@terra-money/legacy.proto/terra/wasm/v1beta1/tx");
+const tx_2 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx");
+const Long = __importStar(require("long"));
+class MsgInstantiateContract extends json_1.JSONSerializable {
     /**
      * @param sender is a sender address
      * @param admin is an optional contract admin address who can migrate the contract, put empty string to disable migration
@@ -55,35 +39,33 @@ var MsgInstantiateContract = /** @class */ (function (_super) {
      * @param init_coins are transferred to the contract on execution
      * @param label label for the contract. v2 supported only
      */
-    function MsgInstantiateContract(sender, admin, code_id, init_msg, init_coins, label) {
-        if (init_coins === void 0) { init_coins = {}; }
-        var _this = _super.call(this) || this;
-        _this.sender = sender;
-        _this.admin = admin;
-        _this.code_id = code_id;
-        _this.init_msg = init_msg;
-        _this.label = label;
-        _this.init_coins = new Coins_1.Coins(init_coins);
-        return _this;
+    constructor(sender, admin, code_id, init_msg, init_coins = {}, label) {
+        super();
+        this.sender = sender;
+        this.admin = admin;
+        this.code_id = code_id;
+        this.init_msg = init_msg;
+        this.label = label;
+        this.init_coins = new Coins_1.Coins(init_coins);
     }
-    MsgInstantiateContract.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (isClassic) {
-            var _a = data.value, sender = _a.sender, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins;
+            const { value: { sender, admin, code_id, init_msg, init_coins }, } = data;
             return new MsgInstantiateContract(sender, admin, Number.parseInt(code_id), init_msg, Coins_1.Coins.fromAmino(init_coins));
         }
         {
-            var _b = data.value, sender = _b.sender, admin = _b.admin, code_id = _b.code_id, msg = _b.msg, funds = _b.funds, label = _b.label;
+            const { value: { sender, admin, code_id, msg, funds, label }, } = data;
             return new MsgInstantiateContract(sender, admin, Number.parseInt(code_id), msg, Coins_1.Coins.fromAmino(funds), label);
         }
-    };
-    MsgInstantiateContract.prototype.toAmino = function (isClassic) {
-        var _a = this, sender = _a.sender, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins, label = _a.label;
+    }
+    toAmino(isClassic) {
+        const { sender, admin, code_id, init_msg, init_coins, label } = this;
         if (isClassic) {
             return {
                 type: 'wasm/MsgInstantiateContract',
                 value: {
-                    sender: sender,
-                    admin: admin,
+                    sender,
+                    admin,
                     code_id: code_id.toFixed(),
                     init_msg: (0, json_1.removeNull)(init_msg),
                     init_coins: init_coins.toAmino(),
@@ -94,49 +76,49 @@ var MsgInstantiateContract = /** @class */ (function (_super) {
             return {
                 type: 'wasm/MsgInstantiateContract',
                 value: {
-                    sender: sender,
-                    admin: admin,
+                    sender,
+                    admin,
                     code_id: code_id.toFixed(),
-                    label: label,
+                    label,
                     msg: (0, json_1.removeNull)(init_msg),
                     funds: init_coins.toAmino(),
                 },
             };
         }
-    };
-    MsgInstantiateContract.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
-            var p = proto;
+            const p = proto;
             return new MsgInstantiateContract(p.sender, p.admin !== '' ? p.admin : undefined, p.codeId.toNumber(), JSON.parse(Buffer.from(p.initMsg).toString('utf-8')), Coins_1.Coins.fromProto(p.initCoins));
         }
         else {
-            var p = proto;
+            const p = proto;
             return new MsgInstantiateContract(p.sender, p.admin !== '' ? p.admin : undefined, p.codeId.toNumber(), JSON.parse(Buffer.from(p.msg).toString('utf-8')), Coins_1.Coins.fromProto(p.funds), p.label !== '' ? p.label : undefined);
         }
-    };
-    MsgInstantiateContract.prototype.toProto = function (isClassic) {
-        var _a = this, sender = _a.sender, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins, label = _a.label;
+    }
+    toProto(isClassic) {
+        const { sender, admin, code_id, init_msg, init_coins, label } = this;
         if (isClassic) {
             return tx_1.MsgInstantiateContract.fromPartial({
-                admin: admin,
+                admin,
                 codeId: Long.fromNumber(code_id),
                 initCoins: init_coins.toProto(),
                 initMsg: Buffer.from(JSON.stringify(init_msg), 'utf-8'),
-                sender: sender,
+                sender,
             });
         }
         else {
             return tx_2.MsgInstantiateContract.fromPartial({
-                admin: admin,
+                admin,
                 codeId: Long.fromNumber(code_id),
                 funds: init_coins.toProto(),
                 msg: Buffer.from(JSON.stringify(init_msg), 'utf-8'),
-                sender: sender,
-                label: label,
+                sender,
+                label,
             });
         }
-    };
-    MsgInstantiateContract.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (isClassic) {
             return any_1.Any.fromPartial({
                 typeUrl: '/jmes.wasm.v1beta1.MsgInstantiateContract',
@@ -149,31 +131,31 @@ var MsgInstantiateContract = /** @class */ (function (_super) {
                 value: tx_2.MsgInstantiateContract.encode(this.toProto(isClassic)).finish(),
             });
         }
-    };
-    MsgInstantiateContract.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (isClassic) {
             return MsgInstantiateContract.fromProto(tx_1.MsgInstantiateContract.decode(msgAny.value), isClassic);
         }
         else {
             return MsgInstantiateContract.fromProto(tx_2.MsgInstantiateContract.decode(msgAny.value), isClassic);
         }
-    };
-    MsgInstantiateContract.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (isClassic) {
-            var _a = data, sender = _a.sender, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins;
+            const { sender, admin, code_id, init_msg, init_coins } = data;
             return new MsgInstantiateContract(sender, admin !== '' ? admin : undefined, Number.parseInt(code_id), init_msg, Coins_1.Coins.fromData(init_coins));
         }
         else {
-            var _b = data, sender = _b.sender, admin = _b.admin, code_id = _b.code_id, label = _b.label, msg = _b.msg, funds = _b.funds;
+            const { sender, admin, code_id, label, msg, funds } = data;
             return new MsgInstantiateContract(sender, admin !== '' ? admin : undefined, Number.parseInt(code_id), msg, Coins_1.Coins.fromData(funds), label);
         }
-    };
-    MsgInstantiateContract.prototype.toData = function (isClassic) {
-        var _a = this, sender = _a.sender, admin = _a.admin, code_id = _a.code_id, label = _a.label, init_msg = _a.init_msg, init_coins = _a.init_coins;
+    }
+    toData(isClassic) {
+        const { sender, admin, code_id, label, init_msg, init_coins } = this;
         if (isClassic) {
             return {
                 '@type': '/jmes.wasm.v1beta1.MsgInstantiateContract',
-                sender: sender,
+                sender,
                 admin: admin || '',
                 code_id: code_id.toFixed(),
                 init_msg: (0, json_1.removeNull)(init_msg),
@@ -183,16 +165,15 @@ var MsgInstantiateContract = /** @class */ (function (_super) {
         else {
             return {
                 '@type': '/cosmwasm.wasm.v1.MsgInstantiateContract',
-                sender: sender,
+                sender,
                 admin: admin || '',
                 code_id: code_id.toFixed(),
-                label: label,
+                label,
                 msg: (0, json_1.removeNull)(init_msg),
                 funds: init_coins.toData(),
             };
         }
-    };
-    return MsgInstantiateContract;
-}(json_1.JSONSerializable));
+    }
+}
 exports.MsgInstantiateContract = MsgInstantiateContract;
 //# sourceMappingURL=MsgInstantiateContract.js.map

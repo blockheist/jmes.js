@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,13 +24,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MigrateContractProposal = void 0;
-var json_1 = require("../../../util/json");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
-var Long = __importStar(require("long"));
+const json_1 = require("../../../util/json");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
+const Long = __importStar(require("long"));
 /** MigrateContractProposal gov proposal content type to migrate a contract. */
-var MigrateContractProposal = /** @class */ (function (_super) {
-    __extends(MigrateContractProposal, _super);
+class MigrateContractProposal extends json_1.JSONSerializable {
     /**
      * @param title a short summary
      * @param description a human readable text
@@ -53,59 +37,58 @@ var MigrateContractProposal = /** @class */ (function (_super) {
      * @param new_code_id reference to the new code on the blockchain
      * @param migrate_msg JSON message to configure the migrate state of the contract
      */
-    function MigrateContractProposal(title, description, contract, new_code_id, migrate_msg // json object or string
+    constructor(title, description, contract, new_code_id, migrate_msg // json object or string
     ) {
-        var _this = _super.call(this) || this;
-        _this.title = title;
-        _this.description = description;
-        _this.contract = contract;
-        _this.new_code_id = new_code_id;
-        _this.migrate_msg = migrate_msg;
-        return _this;
+        super();
+        this.title = title;
+        this.description = description;
+        this.contract = contract;
+        this.new_code_id = new_code_id;
+        this.migrate_msg = migrate_msg;
     }
-    MigrateContractProposal.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data.value, title = _a.title, description = _a.description, contract = _a.contract, code_id = _a.code_id, msg = _a.msg;
+        const { value: { title, description, contract, code_id, msg }, } = data;
         return new MigrateContractProposal(title, description, contract, Number.parseInt(code_id), msg);
-    };
-    MigrateContractProposal.prototype.toAmino = function (isClassic) {
+    }
+    toAmino(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract, new_code_id = _a.new_code_id, migrate_msg = _a.migrate_msg;
+        const { title, description, contract, new_code_id, migrate_msg } = this;
         return {
             type: 'wasm/MigrateContractProposal',
             value: {
-                title: title,
-                description: description,
-                contract: contract,
+                title,
+                description,
+                contract,
                 code_id: new_code_id.toFixed(),
                 msg: (0, json_1.removeNull)(migrate_msg),
             },
         };
-    };
-    MigrateContractProposal.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return new MigrateContractProposal(proto.title, proto.description, proto.contract, proto.codeId.toNumber(), JSON.parse(Buffer.from(proto.msg).toString('utf-8')));
-    };
-    MigrateContractProposal.prototype.toProto = function (isClassic) {
+    }
+    toProto(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract, new_code_id = _a.new_code_id, migrate_msg = _a.migrate_msg;
+        const { title, description, contract, new_code_id, migrate_msg } = this;
         return proposal_1.MigrateContractProposal.fromPartial({
-            title: title,
-            description: description,
-            contract: contract,
+            title,
+            description,
+            contract,
             codeId: Long.fromNumber(new_code_id),
             msg: Buffer.from(JSON.stringify(migrate_msg), 'utf-8'),
         });
-    };
-    MigrateContractProposal.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -113,35 +96,34 @@ var MigrateContractProposal = /** @class */ (function (_super) {
             typeUrl: '/cosmwasm.wasm.v1.MigrateContractProposal',
             value: proposal_1.MigrateContractProposal.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    MigrateContractProposal.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return MigrateContractProposal.fromProto(proposal_1.MigrateContractProposal.decode(msgAny.value), isClassic);
-    };
-    MigrateContractProposal.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data, title = _a.title, description = _a.description, contract = _a.contract, code_id = _a.code_id, msg = _a.msg;
+        const { title, description, contract, code_id, msg } = data;
         return new MigrateContractProposal(title, description, contract, Number.parseInt(code_id), msg);
-    };
-    MigrateContractProposal.prototype.toData = function (isClassic) {
+    }
+    toData(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, title = _a.title, description = _a.description, contract = _a.contract, new_code_id = _a.new_code_id, migrate_msg = _a.migrate_msg;
+        const { title, description, contract, new_code_id, migrate_msg } = this;
         return {
             '@type': '/cosmwasm.wasm.v1.MigrateContractProposal',
-            title: title,
-            description: description,
-            contract: contract,
+            title,
+            description,
+            contract,
             code_id: new_code_id.toFixed(),
             msg: (0, json_1.removeNull)(migrate_msg),
         };
-    };
-    return MigrateContractProposal;
-}(json_1.JSONSerializable));
+    }
+}
 exports.MigrateContractProposal = MigrateContractProposal;
 //# sourceMappingURL=MigrateContractProposal.js.map

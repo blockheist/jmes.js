@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,54 +24,52 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Validator = exports.ValidatorSet = exports.CommitSig = exports.Commit = exports.PartSetHeader = exports.BlockID = exports.SignedHeader = exports.Header = void 0;
-var types_1 = require("@terra-money/terra.proto/tendermint/types/types");
-var validator_1 = require("@terra-money/terra.proto/tendermint/types/validator");
-var Long = __importStar(require("long"));
-var json_1 = require("../../../../../util/json");
-var version_1 = require("./version");
-var crypto_1 = require("./crypto");
+const types_1 = require("@terra-money/terra.proto/tendermint/types/types");
+const validator_1 = require("@terra-money/terra.proto/tendermint/types/validator");
+const Long = __importStar(require("long"));
+const json_1 = require("../../../../../util/json");
+const version_1 = require("./version");
+const crypto_1 = require("./crypto");
 /** Header defines the structure of a Tendermint block header. */
-var Header = /** @class */ (function (_super) {
-    __extends(Header, _super);
+class Header extends json_1.JSONSerializable {
     /**
      * @param total
      * @param hash
      */
-    function Header(version, chainId, height, time, lastBlockId, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress) {
-        var _this = _super.call(this) || this;
-        _this.version = version;
-        _this.chainId = chainId;
-        _this.height = height;
-        _this.time = time;
-        _this.lastBlockId = lastBlockId;
-        _this.lastCommitHash = lastCommitHash;
-        _this.dataHash = dataHash;
-        _this.validatorsHash = validatorsHash;
-        _this.nextValidatorsHash = nextValidatorsHash;
-        _this.consensusHash = consensusHash;
-        _this.appHash = appHash;
-        _this.lastResultsHash = lastResultsHash;
-        _this.evidenceHash = evidenceHash;
-        _this.proposerAddress = proposerAddress;
-        return _this;
+    constructor(version, chainId, height, time, lastBlockId, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress) {
+        super();
+        this.version = version;
+        this.chainId = chainId;
+        this.height = height;
+        this.time = time;
+        this.lastBlockId = lastBlockId;
+        this.lastCommitHash = lastCommitHash;
+        this.dataHash = dataHash;
+        this.validatorsHash = validatorsHash;
+        this.nextValidatorsHash = nextValidatorsHash;
+        this.consensusHash = consensusHash;
+        this.appHash = appHash;
+        this.lastResultsHash = lastResultsHash;
+        this.evidenceHash = evidenceHash;
+        this.proposerAddress = proposerAddress;
     }
-    Header.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    Header.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    Header.fromData = function (data) {
-        var version = data.version, chainId = data.chain_id, height = data.height, time = data.time, lastBlockId = data.last_block_id, lastCommitHash = data.last_commit_hash, dataHash = data.data_hash, validatorsHash = data.validators_hash, nextValidatorsHash = data.next_validators_hash, consensusHash = data.consensus_hash, appHash = data.app_hash, lastResultsHash = data.last_results_hash, evidenceHash = data.evidence_hash, proposerAddress = data.proposer_address;
+    }
+    static fromData(data) {
+        const { version, chain_id: chainId, height, time, last_block_id: lastBlockId, last_commit_hash: lastCommitHash, data_hash: dataHash, validators_hash: validatorsHash, next_validators_hash: nextValidatorsHash, consensus_hash: consensusHash, app_hash: appHash, last_results_hash: lastResultsHash, evidence_hash: evidenceHash, proposer_address: proposerAddress, } = data;
         return new Header(version ? version_1.Consensus.fromData(version) : undefined, chainId, height, time ? new Date(time) : undefined, lastBlockId ? BlockID.fromData(lastBlockId) : undefined, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress);
-    };
-    Header.prototype.toData = function () {
-        var _a = this, version = _a.version, chainId = _a.chainId, height = _a.height, time = _a.time, lastBlockId = _a.lastBlockId, lastCommitHash = _a.lastCommitHash, dataHash = _a.dataHash, validatorsHash = _a.validatorsHash, nextValidatorsHash = _a.nextValidatorsHash, consensusHash = _a.consensusHash, appHash = _a.appHash, lastResultsHash = _a.lastResultsHash, evidenceHash = _a.evidenceHash, proposerAddress = _a.proposerAddress;
-        var res = {
+    }
+    toData() {
+        const { version, chainId, height, time, lastBlockId, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress, } = this;
+        const res = {
             version: version === null || version === void 0 ? void 0 : version.toData(),
             chain_id: chainId,
-            height: height,
+            height,
             time: time ? time.toISOString().replace(/\.000Z$/, 'Z') : undefined,
             last_block_id: lastBlockId ? lastBlockId.toData() : undefined,
             last_commit_hash: lastCommitHash,
@@ -100,18 +83,18 @@ var Header = /** @class */ (function (_super) {
             proposer_address: proposerAddress,
         };
         return res;
-    };
-    Header.fromProto = function (proto) {
-        var version = proto.version, chainId = proto.chainId, height = proto.height, time = proto.time, lastBlockId = proto.lastBlockId, lastCommitHash = proto.lastCommitHash, dataHash = proto.dataHash, validatorsHash = proto.validatorsHash, nextValidatorsHash = proto.nextValidatorsHash, consensusHash = proto.consensusHash, appHash = proto.appHash, lastResultsHash = proto.lastResultsHash, evidenceHash = proto.evidenceHash, proposerAddress = proto.proposerAddress;
+    }
+    static fromProto(proto) {
+        const { version, chainId, height, time, lastBlockId, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress, } = proto;
         return new Header(version ? version_1.Consensus.fromProto(version) : undefined, chainId, height.toString(), time, lastBlockId ? BlockID.fromProto(lastBlockId) : undefined, Buffer.from(lastCommitHash).toString('base64'), Buffer.from(dataHash).toString('base64'), Buffer.from(validatorsHash).toString('base64'), Buffer.from(nextValidatorsHash).toString('base64'), Buffer.from(consensusHash).toString('base64'), Buffer.from(appHash).toString('base64'), Buffer.from(lastResultsHash).toString('base64'), Buffer.from(evidenceHash).toString('base64'), proposerAddress.toString());
-    };
-    Header.prototype.toProto = function () {
-        var _a = this, version = _a.version, chainId = _a.chainId, height = _a.height, time = _a.time, lastBlockId = _a.lastBlockId, lastCommitHash = _a.lastCommitHash, dataHash = _a.dataHash, validatorsHash = _a.validatorsHash, nextValidatorsHash = _a.nextValidatorsHash, consensusHash = _a.consensusHash, appHash = _a.appHash, lastResultsHash = _a.lastResultsHash, evidenceHash = _a.evidenceHash, proposerAddress = _a.proposerAddress;
+    }
+    toProto() {
+        const { version, chainId, height, time, lastBlockId, lastCommitHash, dataHash, validatorsHash, nextValidatorsHash, consensusHash, appHash, lastResultsHash, evidenceHash, proposerAddress, } = this;
         return types_1.Header.fromPartial({
             version: version === null || version === void 0 ? void 0 : version.toProto(),
-            chainId: chainId,
+            chainId,
             height: Long.fromString(height),
-            time: time,
+            time,
             lastBlockId: lastBlockId === null || lastBlockId === void 0 ? void 0 : lastBlockId.toProto(),
             lastCommitHash: Buffer.from(lastCommitHash, 'base64'),
             dataHash: Buffer.from(dataHash, 'base64'),
@@ -123,231 +106,216 @@ var Header = /** @class */ (function (_super) {
             evidenceHash: Buffer.from(evidenceHash, 'base64'),
             proposerAddress: Buffer.from(proposerAddress),
         });
-    };
-    return Header;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Header = Header;
-var SignedHeader = /** @class */ (function (_super) {
-    __extends(SignedHeader, _super);
+class SignedHeader extends json_1.JSONSerializable {
     /**
      * @param header
      * @param commit
      */
-    function SignedHeader(header, commit) {
-        var _this = _super.call(this) || this;
-        _this.header = header;
-        _this.commit = commit;
-        return _this;
+    constructor(header, commit) {
+        super();
+        this.header = header;
+        this.commit = commit;
     }
-    SignedHeader.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    SignedHeader.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    SignedHeader.fromData = function (data) {
-        var header = data.header, commit = data.commit;
+    }
+    static fromData(data) {
+        const { header, commit } = data;
         return new SignedHeader(header ? Header.fromData(header) : undefined, commit ? Commit.fromData(commit) : undefined);
-    };
-    SignedHeader.prototype.toData = function () {
-        var _a = this, header = _a.header, commit = _a.commit;
-        var res = {
+    }
+    toData() {
+        const { header, commit } = this;
+        const res = {
             header: header === null || header === void 0 ? void 0 : header.toData(),
             commit: commit === null || commit === void 0 ? void 0 : commit.toData(),
         };
         return res;
-    };
-    SignedHeader.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new SignedHeader(proto.header ? Header.fromProto(proto.header) : undefined, proto.commit ? Commit.fromProto(proto.commit) : undefined);
-    };
-    SignedHeader.prototype.toProto = function () {
-        var _a = this, header = _a.header, commit = _a.commit;
+    }
+    toProto() {
+        const { header, commit } = this;
         return types_1.SignedHeader.fromPartial({
             header: header === null || header === void 0 ? void 0 : header.toProto(),
             commit: commit === null || commit === void 0 ? void 0 : commit.toProto(),
         });
-    };
-    return SignedHeader;
-}(json_1.JSONSerializable));
+    }
+}
 exports.SignedHeader = SignedHeader;
 /** BlockID */
-var BlockID = /** @class */ (function (_super) {
-    __extends(BlockID, _super);
+class BlockID extends json_1.JSONSerializable {
     /**
      * @param hash
      * @param partSetHeader
      */
-    function BlockID(hash, partSetHeader) {
-        var _this = _super.call(this) || this;
-        _this.hash = hash;
-        _this.partSetHeader = partSetHeader;
-        return _this;
+    constructor(hash, partSetHeader) {
+        super();
+        this.hash = hash;
+        this.partSetHeader = partSetHeader;
     }
-    BlockID.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    BlockID.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    BlockID.fromData = function (data) {
-        var hash = data.hash, partSetHeader = data.part_set_header;
+    }
+    static fromData(data) {
+        const { hash, part_set_header: partSetHeader } = data;
         return new BlockID(hash, partSetHeader ? PartSetHeader.fromData(partSetHeader) : undefined);
-    };
-    BlockID.prototype.toData = function () {
-        var _a = this, hash = _a.hash, partSetHeader = _a.partSetHeader;
-        var res = {
-            hash: hash,
+    }
+    toData() {
+        const { hash, partSetHeader } = this;
+        const res = {
+            hash,
             part_set_header: partSetHeader === null || partSetHeader === void 0 ? void 0 : partSetHeader.toData(),
         };
         return res;
-    };
-    BlockID.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new BlockID(Buffer.from(proto.hash).toString('base64'), proto.partSetHeader
             ? PartSetHeader.fromProto(proto.partSetHeader)
             : undefined);
-    };
-    BlockID.prototype.toProto = function () {
-        var _a = this, hash = _a.hash, partSetHeader = _a.partSetHeader;
+    }
+    toProto() {
+        const { hash, partSetHeader } = this;
         return types_1.BlockID.fromPartial({
             hash: Buffer.from(hash, 'base64'),
             partSetHeader: partSetHeader ? partSetHeader.toProto() : undefined,
         });
-    };
-    return BlockID;
-}(json_1.JSONSerializable));
+    }
+}
 exports.BlockID = BlockID;
 /** PartsetHeader */
-var PartSetHeader = /** @class */ (function (_super) {
-    __extends(PartSetHeader, _super);
+class PartSetHeader extends json_1.JSONSerializable {
     /**
      * @param total
      * @param hash
      */
-    function PartSetHeader(total, hash) {
-        var _this = _super.call(this) || this;
-        _this.total = total;
-        _this.hash = hash;
-        return _this;
+    constructor(total, hash) {
+        super();
+        this.total = total;
+        this.hash = hash;
     }
-    PartSetHeader.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    PartSetHeader.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    PartSetHeader.fromData = function (data) {
-        var total = data.total, hash = data.hash;
+    }
+    static fromData(data) {
+        const { total, hash } = data;
         return new PartSetHeader(parseInt(total), hash);
-    };
-    PartSetHeader.prototype.toData = function () {
-        var _a = this, total = _a.total, hash = _a.hash;
-        var res = {
+    }
+    toData() {
+        const { total, hash } = this;
+        const res = {
             total: total.toFixed(),
             hash: hash,
         };
         return res;
-    };
-    PartSetHeader.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new PartSetHeader(proto.total, Buffer.from(proto.hash).toString('base64'));
-    };
-    PartSetHeader.prototype.toProto = function () {
-        var _a = this, total = _a.total, hash = _a.hash;
+    }
+    toProto() {
+        const { total, hash } = this;
         return types_1.PartSetHeader.fromPartial({
             total: total,
             hash: Buffer.from(hash, 'base64'),
         });
-    };
-    return PartSetHeader;
-}(json_1.JSONSerializable));
+    }
+}
 exports.PartSetHeader = PartSetHeader;
 /** Commit contains the evidence that a block was committed by a set of validators. */
-var Commit = /** @class */ (function (_super) {
-    __extends(Commit, _super);
+class Commit extends json_1.JSONSerializable {
     /**
      * @param height
      * @param round
      * @param blockId
      * @param signatures
      */
-    function Commit(height, round, blockId, signatures) {
-        var _this = _super.call(this) || this;
-        _this.height = height;
-        _this.round = round;
-        _this.blockId = blockId;
-        _this.signatures = signatures;
-        return _this;
+    constructor(height, round, blockId, signatures) {
+        super();
+        this.height = height;
+        this.round = round;
+        this.blockId = blockId;
+        this.signatures = signatures;
     }
-    Commit.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    Commit.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    Commit.fromData = function (data) {
-        var height = data.height, round = data.round, blockId = data.block_id, signatures = data.signatures;
-        return new Commit(Long.fromString(height), Number.parseInt(round), blockId ? BlockID.fromData(blockId) : undefined, signatures.map(function (sig) { return CommitSig.fromData(sig); }));
-    };
-    Commit.prototype.toData = function () {
-        var _a = this, height = _a.height, round = _a.round, blockId = _a.blockId, signatures = _a.signatures;
-        var res = {
+    }
+    static fromData(data) {
+        const { height, round, block_id: blockId, signatures } = data;
+        return new Commit(Long.fromString(height), Number.parseInt(round), blockId ? BlockID.fromData(blockId) : undefined, signatures.map(sig => CommitSig.fromData(sig)));
+    }
+    toData() {
+        const { height, round, blockId, signatures } = this;
+        const res = {
             height: height.toString(),
             round: round.toFixed(),
             block_id: blockId === null || blockId === void 0 ? void 0 : blockId.toData(),
-            signatures: signatures.map(function (sig) { return sig.toData(); }),
+            signatures: signatures.map(sig => sig.toData()),
         };
         return res;
-    };
-    Commit.fromProto = function (proto) {
-        var height = proto.height, round = proto.round, blockId = proto.blockId, signatures = proto.signatures;
-        return new Commit(height, round, blockId ? BlockID.fromProto(blockId) : undefined, signatures.map(function (sig) { return CommitSig.fromProto(sig); }));
-    };
-    Commit.prototype.toProto = function () {
-        var _a = this, height = _a.height, round = _a.round, blockId = _a.blockId, signatures = _a.signatures;
+    }
+    static fromProto(proto) {
+        const { height, round, blockId, signatures } = proto;
+        return new Commit(height, round, blockId ? BlockID.fromProto(blockId) : undefined, signatures.map(sig => CommitSig.fromProto(sig)));
+    }
+    toProto() {
+        const { height, round, blockId, signatures } = this;
         return types_1.Commit.fromPartial({
-            height: height,
-            round: round,
+            height,
+            round,
             blockId: blockId === null || blockId === void 0 ? void 0 : blockId.toProto(),
-            signatures: signatures.map(function (sig) { return sig.toProto(); }),
+            signatures: signatures.map(sig => sig.toProto()),
         });
-    };
-    return Commit;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Commit = Commit;
 /** CommitSig is a part of the Vote included in a Commit. */
-var CommitSig = /** @class */ (function (_super) {
-    __extends(CommitSig, _super);
+class CommitSig extends json_1.JSONSerializable {
     /**
      * @param blockIdFlag
      * @param validatorAddress
      * @param timestamp
      * @param signature
      */
-    function CommitSig(blockIdFlag, validatorAddress, timestamp, signature) {
-        var _this = _super.call(this) || this;
-        _this.blockIdFlag = blockIdFlag;
-        _this.validatorAddress = validatorAddress;
-        _this.timestamp = timestamp;
-        _this.signature = signature;
-        return _this;
+    constructor(blockIdFlag, validatorAddress, timestamp, signature) {
+        super();
+        this.blockIdFlag = blockIdFlag;
+        this.validatorAddress = validatorAddress;
+        this.timestamp = timestamp;
+        this.signature = signature;
     }
-    CommitSig.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    CommitSig.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    CommitSig.fromData = function (data) {
-        var block_id_flag = data.block_id_flag, validator_address = data.validator_address, timestamp = data.timestamp, signature = data.signature;
+    }
+    static fromData(data) {
+        const { block_id_flag, validator_address, timestamp, signature } = data;
         return new CommitSig((0, types_1.blockIDFlagFromJSON)(block_id_flag), validator_address, timestamp ? new Date(timestamp) : undefined, signature);
-    };
-    CommitSig.prototype.toData = function () {
-        var _a = this, blockIdFlag = _a.blockIdFlag, validatorAddress = _a.validatorAddress, timestamp = _a.timestamp, signature = _a.signature;
-        var res = {
+    }
+    toData() {
+        const { blockIdFlag, validatorAddress, timestamp, signature } = this;
+        const res = {
             block_id_flag: (0, types_1.blockIDFlagToJSON)(blockIdFlag),
             validator_address: validatorAddress || '',
             timestamp: timestamp
@@ -356,126 +324,119 @@ var CommitSig = /** @class */ (function (_super) {
             signature: signature || '',
         };
         return res;
-    };
-    CommitSig.fromProto = function (proto) {
-        var blockIdFlag = proto.blockIdFlag, validatorAddress = proto.validatorAddress, timestamp = proto.timestamp, signature = proto.signature;
+    }
+    static fromProto(proto) {
+        const { blockIdFlag, validatorAddress, timestamp, signature } = proto;
         return new CommitSig(blockIdFlag, Buffer.from(validatorAddress).toString('base64'), timestamp, Buffer.from(signature).toString('base64'));
-    };
-    CommitSig.prototype.toProto = function () {
-        var _a = this, blockIdFlag = _a.blockIdFlag, validatorAddress = _a.validatorAddress, timestamp = _a.timestamp, signature = _a.signature;
+    }
+    toProto() {
+        const { blockIdFlag, validatorAddress, timestamp, signature } = this;
         return types_1.CommitSig.fromPartial({
-            blockIdFlag: blockIdFlag,
+            blockIdFlag,
             validatorAddress: validatorAddress
                 ? Buffer.from(validatorAddress, 'base64')
                 : undefined,
-            timestamp: timestamp,
+            timestamp,
             signature: signature ? Buffer.from(signature, 'base64') : undefined,
         });
-    };
-    return CommitSig;
-}(json_1.JSONSerializable));
+    }
+}
 exports.CommitSig = CommitSig;
-var ValidatorSet = /** @class */ (function (_super) {
-    __extends(ValidatorSet, _super);
+class ValidatorSet extends json_1.JSONSerializable {
     /**
      * @param validators
      * @param proposer
      * @param totalVotingPower
      */
-    function ValidatorSet(validators, proposer, totalVotingPower) {
-        var _this = _super.call(this) || this;
-        _this.validators = validators;
-        _this.proposer = proposer;
-        _this.totalVotingPower = totalVotingPower;
-        return _this;
+    constructor(validators, proposer, totalVotingPower) {
+        super();
+        this.validators = validators;
+        this.proposer = proposer;
+        this.totalVotingPower = totalVotingPower;
     }
-    ValidatorSet.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    ValidatorSet.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    ValidatorSet.fromData = function (data) {
-        var validators = data.validators, proposer = data.proposer, total_voting_power = data.total_voting_power;
-        return new ValidatorSet(validators.map(function (val) { return Validator.fromData(val); }), proposer ? Validator.fromData(proposer) : undefined, Long.fromString(total_voting_power));
-    };
-    ValidatorSet.prototype.toData = function () {
-        var _a = this, validators = _a.validators, proposer = _a.proposer, totalVotingPower = _a.totalVotingPower;
-        var res = {
-            validators: validators.map(function (val) { return val.toData(); }),
+    }
+    static fromData(data) {
+        const { validators, proposer, total_voting_power } = data;
+        return new ValidatorSet(validators.map(val => Validator.fromData(val)), proposer ? Validator.fromData(proposer) : undefined, Long.fromString(total_voting_power));
+    }
+    toData() {
+        const { validators, proposer, totalVotingPower } = this;
+        const res = {
+            validators: validators.map(val => val.toData()),
             proposer: proposer === null || proposer === void 0 ? void 0 : proposer.toData(),
             total_voting_power: totalVotingPower.toString(),
         };
         return res;
-    };
-    ValidatorSet.fromProto = function (proto) {
-        var validators = proto.validators, proposer = proto.proposer, totalVotingPower = proto.totalVotingPower;
-        return new ValidatorSet(validators.map(function (val) { return Validator.fromProto(val); }), proposer ? Validator.fromProto(proposer) : undefined, totalVotingPower);
-    };
-    ValidatorSet.prototype.toProto = function () {
-        var _a = this, validators = _a.validators, proposer = _a.proposer, totalVotingPower = _a.totalVotingPower;
+    }
+    static fromProto(proto) {
+        const { validators, proposer, totalVotingPower } = proto;
+        return new ValidatorSet(validators.map(val => Validator.fromProto(val)), proposer ? Validator.fromProto(proposer) : undefined, totalVotingPower);
+    }
+    toProto() {
+        const { validators, proposer, totalVotingPower } = this;
         return validator_1.ValidatorSet.fromPartial({
-            validators: validators.map(function (val) { return val.toProto(); }),
+            validators: validators.map(val => val.toProto()),
             proposer: (proposer === null || proposer === void 0 ? void 0 : proposer.toProto()) || undefined,
-            totalVotingPower: totalVotingPower,
+            totalVotingPower,
         });
-    };
-    return ValidatorSet;
-}(json_1.JSONSerializable));
+    }
+}
 exports.ValidatorSet = ValidatorSet;
-var Validator = /** @class */ (function (_super) {
-    __extends(Validator, _super);
+class Validator extends json_1.JSONSerializable {
     /**
      * @param address
      * @param pubKey
      * @param votingPower
      * @param proposerPriority
      */
-    function Validator(address, // not AccAddress in case of opposite chain is not cosmos-sdk based
+    constructor(address, // not AccAddress in case of opposite chain is not cosmos-sdk based
     pubKey, votingPower, proposerPriority) {
-        var _this = _super.call(this) || this;
-        _this.address = address;
-        _this.pubKey = pubKey;
-        _this.votingPower = votingPower;
-        _this.proposerPriority = proposerPriority;
-        return _this;
+        super();
+        this.address = address;
+        this.pubKey = pubKey;
+        this.votingPower = votingPower;
+        this.proposerPriority = proposerPriority;
     }
-    Validator.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    Validator.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    Validator.fromData = function (data) {
-        var address = data.address, pubKey = data.pub_key, votingPower = data.voting_power, proposerPriority = data.proposer_priority;
+    }
+    static fromData(data) {
+        const { address, pub_key: pubKey, voting_power: votingPower, proposer_priority: proposerPriority, } = data;
         return new Validator(address, pubKey ? crypto_1.PublicKey.fromData(pubKey) : undefined, Long.fromString(votingPower), Long.fromString(proposerPriority));
-    };
-    Validator.prototype.toData = function () {
-        var _a = this, address = _a.address, pubKey = _a.pubKey, votingPower = _a.votingPower, proposerPriority = _a.proposerPriority;
-        var res = {
-            address: address,
+    }
+    toData() {
+        const { address, pubKey, votingPower, proposerPriority } = this;
+        const res = {
+            address,
             pub_key: pubKey === null || pubKey === void 0 ? void 0 : pubKey.toData(),
             voting_power: votingPower.toString(),
             proposer_priority: proposerPriority.toString(),
         };
         return res;
-    };
-    Validator.fromProto = function (proto) {
-        var address = proto.address, pubKey = proto.pubKey, votingPower = proto.votingPower, proposerPriority = proto.proposerPriority;
+    }
+    static fromProto(proto) {
+        const { address, pubKey, votingPower, proposerPriority } = proto;
         return new Validator(Buffer.from(address).toString('base64'), pubKey ? crypto_1.PublicKey.fromProto(pubKey) : undefined, votingPower, proposerPriority);
-    };
-    Validator.prototype.toProto = function () {
-        var _a = this, address = _a.address, pubKey = _a.pubKey, votingPower = _a.votingPower, proposerPriority = _a.proposerPriority;
+    }
+    toProto() {
+        const { address, pubKey, votingPower, proposerPriority } = this;
         return validator_1.Validator.fromPartial({
             address: Buffer.from(address, 'base64'),
             pubKey: (pubKey === null || pubKey === void 0 ? void 0 : pubKey.toProto()) || undefined,
-            votingPower: votingPower,
-            proposerPriority: proposerPriority,
+            votingPower,
+            proposerPriority,
         });
-    };
-    return Validator;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Validator = Validator;
 //# sourceMappingURL=types.js.map

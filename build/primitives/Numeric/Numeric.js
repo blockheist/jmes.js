@@ -1,25 +1,10 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.int = exports.dec = exports.Int = exports.Dec = exports.Numeric = exports.DEC_PRECISION = void 0;
-var decimal_js_1 = __importDefault(require("decimal.js"));
+const decimal_js_1 = __importDefault(require("decimal.js"));
 exports.DEC_PRECISION = 18;
 var Numeric;
 (function (Numeric) {
@@ -36,7 +21,7 @@ var Numeric;
             }
         }
         else {
-            var _value = new decimal_js_1.default(value);
+            const _value = new decimal_js_1.default(value);
             if (_value.isInteger()) {
                 return new Int(_value);
             }
@@ -62,46 +47,44 @@ var Numeric;
  * const decimal = dec.sqrt();
  * const dec2 = new Dec(decimal);
  */
-var Dec = /** @class */ (function (_super) {
-    __extends(Dec, _super);
-    function Dec(arg) {
-        return _super.call(this, (arg !== null && arg !== void 0 ? arg : 0).toString()) || this;
+class Dec extends decimal_js_1.default {
+    constructor(arg) {
+        super((arg !== null && arg !== void 0 ? arg : 0).toString());
     }
-    Dec.prototype.toString = function () {
+    toString() {
         return this.toFixed(exports.DEC_PRECISION);
-    };
-    Dec.withPrec = function (value, prec) {
+    }
+    static withPrec(value, prec) {
         return new Dec(new Dec(value).div(Math.pow(10, prec)));
-    };
+    }
     // type conversion
-    Dec.prototype.toInt = function () {
+    toInt() {
         return new Int(this);
-    };
+    }
     // arithmetic
-    Dec.prototype.add = function (other) {
-        var val = new Dec(Numeric.parse(other));
-        return new Dec(_super.prototype.add.call(this, val));
-    };
-    Dec.prototype.sub = function (other) {
-        var val = new Dec(Numeric.parse(other));
-        return new Dec(_super.prototype.sub.call(this, val));
-    };
-    Dec.prototype.mul = function (other) {
-        var val = new Dec(Numeric.parse(other));
-        return new Dec(_super.prototype.mul.call(this, val));
-    };
-    Dec.prototype.div = function (other) {
-        var val = new Dec(Numeric.parse(other));
-        return new Dec(_super.prototype.div.call(this, val));
-    };
-    Dec.prototype.mod = function (other) {
-        var val = new Dec(Numeric.parse(other));
-        return new Dec(_super.prototype.mod.call(this, val));
-    };
-    return Dec;
-}(decimal_js_1.default));
+    add(other) {
+        const val = new Dec(Numeric.parse(other));
+        return new Dec(super.add(val));
+    }
+    sub(other) {
+        const val = new Dec(Numeric.parse(other));
+        return new Dec(super.sub(val));
+    }
+    mul(other) {
+        const val = new Dec(Numeric.parse(other));
+        return new Dec(super.mul(val));
+    }
+    div(other) {
+        const val = new Dec(Numeric.parse(other));
+        return new Dec(super.div(val));
+    }
+    mod(other) {
+        const val = new Dec(Numeric.parse(other));
+        return new Dec(super.mod(val));
+    }
+}
 exports.Dec = Dec;
-var _Int = decimal_js_1.default.clone();
+const _Int = decimal_js_1.default.clone();
 /**
  * Represents Integer values. Used mainly to store integer values of [[Coin]] and [[Coins]].
  *
@@ -120,67 +103,65 @@ var _Int = decimal_js_1.default.clone();
  * const decimal = int.pow(3);
  * const int2 = new Int(decimal);
  */
-var Int = /** @class */ (function (_super) {
-    __extends(Int, _super);
-    function Int(arg) {
-        var _arg = new decimal_js_1.default((arg !== null && arg !== void 0 ? arg : 0).toString());
-        return _super.call(this, _arg.divToInt(1)) || this;
+class Int extends _Int {
+    constructor(arg) {
+        const _arg = new decimal_js_1.default((arg !== null && arg !== void 0 ? arg : 0).toString());
+        super(_arg.divToInt(1));
     }
-    Int.prototype.toString = function () {
+    toString() {
         return this.toFixed();
-    };
+    }
     // type conversion
-    Int.prototype.toDec = function () {
+    toDec() {
         return new Dec(this);
-    };
+    }
     // arithmetic
-    Int.prototype.add = function (other) {
-        var val = Numeric.parse(other);
+    add(other) {
+        const val = Numeric.parse(other);
         if (val instanceof Dec) {
             return new Dec(this).add(val);
         }
         else {
             return new Int(this.plus(val));
         }
-    };
-    Int.prototype.sub = function (other) {
-        var val = Numeric.parse(other);
+    }
+    sub(other) {
+        const val = Numeric.parse(other);
         if (val instanceof Dec) {
             return new Dec(this).sub(val);
         }
         else {
             return new Int(this.minus(val));
         }
-    };
-    Int.prototype.mul = function (other) {
-        var val = Numeric.parse(other);
+    }
+    mul(other) {
+        const val = Numeric.parse(other);
         if (val instanceof Dec) {
             return new Dec(this).mul(val);
         }
         else {
             return new Int(this.times(val));
         }
-    };
-    Int.prototype.div = function (other) {
-        var val = Numeric.parse(other);
+    }
+    div(other) {
+        const val = Numeric.parse(other);
         if (val instanceof Dec) {
             return new Dec(this).div(val);
         }
         else {
-            return new Int(_super.prototype.div.call(this, val));
+            return new Int(super.div(val));
         }
-    };
-    Int.prototype.mod = function (other) {
-        var val = Numeric.parse(other);
+    }
+    mod(other) {
+        const val = Numeric.parse(other);
         if (val instanceof Dec) {
             return new Dec(this).mod(val);
         }
         else {
-            return new Int(_super.prototype.mod.call(this, val));
+            return new Int(super.mod(val));
         }
-    };
-    return Int;
-}(_Int));
+    }
+}
 exports.Int = Int;
 /**
  * Template tagged literal for creating new Dec objects out of literal string.

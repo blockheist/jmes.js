@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,106 +24,100 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PublicKey = exports.Proof = void 0;
-var proof_1 = require("@terra-money/terra.proto/tendermint/crypto/proof");
-var keys_1 = require("@terra-money/terra.proto/tendermint/crypto/keys");
-var Long = __importStar(require("long"));
-var json_1 = require("../../../../../util/json");
-var Proof = /** @class */ (function (_super) {
-    __extends(Proof, _super);
+const proof_1 = require("@terra-money/terra.proto/tendermint/crypto/proof");
+const keys_1 = require("@terra-money/terra.proto/tendermint/crypto/keys");
+const Long = __importStar(require("long"));
+const json_1 = require("../../../../../util/json");
+class Proof extends json_1.JSONSerializable {
     /**
      * @param total
      * @param index
      * @param leafHash
      * @param aunts
      */
-    function Proof(total, index, leafHash, aunts) {
-        var _this = _super.call(this) || this;
-        _this.total = total;
-        _this.index = index;
-        _this.leafHash = leafHash;
-        _this.aunts = aunts;
-        return _this;
+    constructor(total, index, leafHash, aunts) {
+        super();
+        this.total = total;
+        this.index = index;
+        this.leafHash = leafHash;
+        this.aunts = aunts;
     }
-    Proof.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    Proof.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    Proof.fromData = function (data) {
-        var total = data.total, index = data.index, leafHash = data.leaf_hash, aunts = data.aunts;
+    }
+    static fromData(data) {
+        const { total, index, leaf_hash: leafHash, aunts } = data;
         return new Proof(Number.parseInt(total), Number.parseInt(index), leafHash, aunts);
-    };
-    Proof.prototype.toData = function () {
-        var _a = this, total = _a.total, index = _a.index, leafHash = _a.leafHash, aunts = _a.aunts;
-        var res = {
+    }
+    toData() {
+        const { total, index, leafHash, aunts } = this;
+        const res = {
             total: total.toFixed(),
             index: index.toFixed(),
             leaf_hash: leafHash,
-            aunts: aunts,
+            aunts,
         };
         return res;
-    };
-    Proof.fromProto = function (proto) {
-        return new Proof(proto.total.toNumber(), proto.index.toNumber(), Buffer.from(proto.leafHash).toString('base64'), proto.aunts.map(function (aunt) { return Buffer.from(aunt).toString('base64'); }));
-    };
-    Proof.prototype.toProto = function () {
-        var _a = this, total = _a.total, index = _a.index, leafHash = _a.leafHash, aunts = _a.aunts;
+    }
+    static fromProto(proto) {
+        return new Proof(proto.total.toNumber(), proto.index.toNumber(), Buffer.from(proto.leafHash).toString('base64'), proto.aunts.map(aunt => Buffer.from(aunt).toString('base64')));
+    }
+    toProto() {
+        const { total, index, leafHash, aunts } = this;
         return proof_1.Proof.fromPartial({
             total: Long.fromNumber(total),
             index: Long.fromNumber(index),
             leafHash: Buffer.from(leafHash, 'base64'),
-            aunts: aunts.map(function (aunt) { return Buffer.from(aunt, 'base64'); }),
+            aunts: aunts.map(aunt => Buffer.from(aunt, 'base64')),
         });
-    };
-    return Proof;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Proof = Proof;
 /** PublicKey defines the keys available for use with Tendermint Validators */
-var PublicKey = /** @class */ (function (_super) {
-    __extends(PublicKey, _super);
+class PublicKey extends json_1.JSONSerializable {
     /**
      * @param ed25519
      * @param secp256k1
      */
-    function PublicKey(ed25519, secp256k1) {
-        var _this = _super.call(this) || this;
-        _this.ed25519 = ed25519;
-        _this.secp256k1 = secp256k1;
-        return _this;
+    constructor(ed25519, secp256k1) {
+        super();
+        this.ed25519 = ed25519;
+        this.secp256k1 = secp256k1;
     }
-    PublicKey.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    PublicKey.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    PublicKey.fromData = function (data) {
-        var ed25519 = data.ed25519, secp256k1 = data.secp256k1;
+    }
+    static fromData(data) {
+        const { ed25519, secp256k1 } = data;
         return new PublicKey(ed25519, secp256k1);
-    };
-    PublicKey.prototype.toData = function () {
-        var _a = this, ed25519 = _a.ed25519, secp256k1 = _a.secp256k1;
-        var res = {
-            ed25519: ed25519,
-            secp256k1: secp256k1,
+    }
+    toData() {
+        const { ed25519, secp256k1 } = this;
+        const res = {
+            ed25519,
+            secp256k1,
         };
         return res;
-    };
-    PublicKey.fromProto = function (proto) {
-        var ed25519 = proto.ed25519, secp256k1 = proto.secp256k1;
+    }
+    static fromProto(proto) {
+        const { ed25519, secp256k1 } = proto;
         return new PublicKey(ed25519 ? Buffer.from(ed25519).toString('base64') : undefined, secp256k1 ? Buffer.from(secp256k1).toString('base64') : undefined);
-    };
-    PublicKey.prototype.toProto = function () {
-        var _a = this, ed25519 = _a.ed25519, secp256k1 = _a.secp256k1;
+    }
+    toProto() {
+        const { ed25519, secp256k1 } = this;
         return keys_1.PublicKey.fromPartial({
             ed25519: ed25519 ? Buffer.from(ed25519, 'base64') : undefined,
             secp256k1: secp256k1 ? Buffer.from(secp256k1, 'base64') : undefined,
         });
-    };
-    return PublicKey;
-}(json_1.JSONSerializable));
+    }
+}
 exports.PublicKey = PublicKey;
 //# sourceMappingURL=crypto.js.map

@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,17 +24,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InstantiateContractProposal = void 0;
-var json_1 = require("../../../util/json");
-var Coins_1 = require("../../Coins");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
-var Long = __importStar(require("long"));
+const json_1 = require("../../../util/json");
+const Coins_1 = require("../../Coins");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
+const Long = __importStar(require("long"));
 /**
  * InstantiateContractProposal gov proposal content type to instantiate a
  * contract.
  */
-var InstantiateContractProposal = /** @class */ (function (_super) {
-    __extends(InstantiateContractProposal, _super);
+class InstantiateContractProposal extends json_1.JSONSerializable {
     /**
      * @param title a short summary
      * @param description a human readable text
@@ -60,68 +44,66 @@ var InstantiateContractProposal = /** @class */ (function (_super) {
      * @param init_coins are transferred to the contract on execution
      * @param label label for the contract. v2 supported only
      */
-    function InstantiateContractProposal(title, description, run_as, admin, code_id, init_msg, init_coins, label) {
-        if (init_coins === void 0) { init_coins = {}; }
-        var _this = _super.call(this) || this;
-        _this.title = title;
-        _this.description = description;
-        _this.run_as = run_as;
-        _this.admin = admin;
-        _this.code_id = code_id;
-        _this.init_msg = init_msg;
-        _this.label = label;
-        _this.init_coins = new Coins_1.Coins(init_coins);
-        return _this;
+    constructor(title, description, run_as, admin, code_id, init_msg, init_coins = {}, label) {
+        super();
+        this.title = title;
+        this.description = description;
+        this.run_as = run_as;
+        this.admin = admin;
+        this.code_id = code_id;
+        this.init_msg = init_msg;
+        this.label = label;
+        this.init_coins = new Coins_1.Coins(init_coins);
     }
-    InstantiateContractProposal.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data.value, title = _a.title, description = _a.description, run_as = _a.run_as, admin = _a.admin, code_id = _a.code_id, msg = _a.msg, funds = _a.funds, label = _a.label;
+        const { value: { title, description, run_as, admin, code_id, msg, funds, label }, } = data;
         return new InstantiateContractProposal(title, description, run_as, admin, Number.parseInt(code_id), msg, Coins_1.Coins.fromAmino(funds), label);
-    };
-    InstantiateContractProposal.prototype.toAmino = function (isClassic) {
-        var _a = this, title = _a.title, description = _a.description, run_as = _a.run_as, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins, label = _a.label;
+    }
+    toAmino(isClassic) {
+        const { title, description, run_as, admin, code_id, init_msg, init_coins, label, } = this;
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return {
             type: 'wasm/InstantiateContractProposal',
             value: {
-                title: title,
-                description: description,
-                run_as: run_as,
-                admin: admin,
+                title,
+                description,
+                run_as,
+                admin,
                 code_id: code_id.toFixed(),
-                label: label,
+                label,
                 msg: (0, json_1.removeNull)(init_msg),
                 funds: init_coins.toAmino(),
             },
         };
-    };
-    InstantiateContractProposal.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return new InstantiateContractProposal(proto.title, proto.description, proto.runAs, proto.admin !== '' ? proto.admin : undefined, proto.codeId.toNumber(), JSON.parse(Buffer.from(proto.msg).toString('utf-8')), Coins_1.Coins.fromProto(proto.funds), proto.label);
-    };
-    InstantiateContractProposal.prototype.toProto = function (isClassic) {
-        var _a = this, title = _a.title, description = _a.description, run_as = _a.run_as, admin = _a.admin, code_id = _a.code_id, init_msg = _a.init_msg, init_coins = _a.init_coins, label = _a.label;
+    }
+    toProto(isClassic) {
+        const { title, description, run_as, admin, code_id, init_msg, init_coins, label, } = this;
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return proposal_1.InstantiateContractProposal.fromPartial({
-            title: title,
-            description: description,
+            title,
+            description,
             runAs: run_as,
-            admin: admin,
+            admin,
             codeId: Long.fromNumber(code_id),
             funds: init_coins.toProto(),
             msg: Buffer.from(JSON.stringify(init_msg), 'utf-8'),
-            label: label,
+            label,
         });
-    };
-    InstantiateContractProposal.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -129,38 +111,37 @@ var InstantiateContractProposal = /** @class */ (function (_super) {
             typeUrl: '/cosmwasm.wasm.v1.InstantiateContractProposal',
             value: proposal_1.InstantiateContractProposal.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    InstantiateContractProposal.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return InstantiateContractProposal.fromProto(proposal_1.InstantiateContractProposal.decode(msgAny.value), isClassic);
-    };
-    InstantiateContractProposal.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data, title = _a.title, description = _a.description, run_as = _a.run_as, admin = _a.admin, code_id = _a.code_id, label = _a.label, msg = _a.msg, funds = _a.funds;
+        const { title, description, run_as, admin, code_id, label, msg, funds } = data;
         return new InstantiateContractProposal(title, description, run_as, admin !== '' ? admin : undefined, Number.parseInt(code_id), msg, Coins_1.Coins.fromData(funds), label);
-    };
-    InstantiateContractProposal.prototype.toData = function (isClassic) {
-        var _a = this, title = _a.title, description = _a.description, run_as = _a.run_as, admin = _a.admin, code_id = _a.code_id, label = _a.label, init_msg = _a.init_msg, init_coins = _a.init_coins;
+    }
+    toData(isClassic) {
+        const { title, description, run_as, admin, code_id, label, init_msg, init_coins, } = this;
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return {
             '@type': '/cosmwasm.wasm.v1.InstantiateContractProposal',
-            title: title,
-            description: description,
-            run_as: run_as,
+            title,
+            description,
+            run_as,
             admin: admin || '',
             code_id: code_id.toFixed(),
-            label: label,
+            label,
             msg: (0, json_1.removeNull)(init_msg),
             funds: init_coins.toData(),
         };
-    };
-    return InstantiateContractProposal;
-}(json_1.JSONSerializable));
+    }
+}
 exports.InstantiateContractProposal = InstantiateContractProposal;
 //# sourceMappingURL=InstantiateContractProposal.js.map

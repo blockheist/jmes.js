@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var LDCD = /** @class */ (function () {
-    function LDCD() {
+class LDCD {
+    constructor() {
     }
-    return LDCD;
-}());
+}
 exports.default = LDCD;
 ;
 //# sourceMappingURL=LDCD.js.map

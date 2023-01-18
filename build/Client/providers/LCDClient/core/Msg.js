@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Msg = void 0;
-var msgs_1 = require("./bank/msgs");
-var msgs_2 = require("./distribution/msgs");
-var msgs_3 = require("./feegrant/msgs");
-var msgs_4 = require("./gov/msgs");
-var msgs_5 = require("./market/msgs");
-var msgs_6 = require("./authz/msgs");
-var msgs_7 = require("./oracle/msgs");
-var msgs_8 = require("./slashing/msgs");
-var msgs_9 = require("./staking/msgs");
-var msgs_10 = require("./vesting/msgs");
-var msgs_11 = require("./wasm/msgs");
-var transfer_1 = require("./ibc/applications/transfer");
-var client_1 = require("./ibc/msgs/client");
-var connection_1 = require("./ibc/msgs/connection");
-var channel_1 = require("./ibc/msgs/channel");
-var crisis_1 = require("./crisis");
+const msgs_1 = require("./bank/msgs");
+const msgs_2 = require("./distribution/msgs");
+const msgs_3 = require("./feegrant/msgs");
+const msgs_4 = require("./gov/msgs");
+const msgs_5 = require("./market/msgs");
+const msgs_6 = require("./authz/msgs");
+const msgs_7 = require("./oracle/msgs");
+const msgs_8 = require("./slashing/msgs");
+const msgs_9 = require("./staking/msgs");
+const msgs_10 = require("./vesting/msgs");
+const msgs_11 = require("./wasm/msgs");
+const transfer_1 = require("./ibc/applications/transfer");
+const client_1 = require("./ibc/msgs/client");
+const connection_1 = require("./ibc/msgs/connection");
+const channel_1 = require("./ibc/msgs/channel");
+const crisis_1 = require("./crisis");
 var Msg;
 (function (Msg) {
     function fromAmino(data, isClassic) {
@@ -274,7 +274,7 @@ var Msg;
             case '/cosmos.crisis.v1beta1.MsgVerifyInvariant':
                 return crisis_1.MsgVerifyInvariant.fromData(data, isClassic);
             default:
-                throw Error("not supported msg ".concat(data['@type']));
+                throw Error(`not supported msg ${data['@type']}`);
         }
     }
     Msg.fromData = fromData;
@@ -413,7 +413,7 @@ var Msg;
             case '/cosmos.crisis.v1beta1.MsgVerifyInvariant':
                 return crisis_1.MsgVerifyInvariant.unpackAny(proto, isClassic);
             default:
-                throw Error("not supported msg ".concat(proto.typeUrl));
+                throw Error(`not supported msg ${proto.typeUrl}`);
         }
     }
     Msg.fromProto = fromProto;

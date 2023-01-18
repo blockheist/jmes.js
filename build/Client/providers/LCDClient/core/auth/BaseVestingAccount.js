@@ -1,30 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -50,16 +24,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseVestingAccount = void 0;
-var json_1 = require("../../util/json");
-var Coins_1 = require("../Coins");
-var BaseAccount_1 = require("./BaseAccount");
-var vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
-var Long = __importStar(require("long"));
+const json_1 = require("../../util/json");
+const Coins_1 = require("../Coins");
+const BaseAccount_1 = require("./BaseAccount");
+const vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
+const Long = __importStar(require("long"));
 /**
  * Holds information about a Account which has vesting information.
  */
-var BaseVestingAccount = /** @class */ (function (_super) {
-    __extends(BaseVestingAccount, _super);
+class BaseVestingAccount extends json_1.JSONSerializable {
     /**
      *
      * @param base_account account information
@@ -68,26 +41,25 @@ var BaseVestingAccount = /** @class */ (function (_super) {
      * @param delegated_vesting
      * @param end_time
      */
-    function BaseVestingAccount(base_account, original_vesting, delegated_free, delegated_vesting, end_time) {
-        var _this = _super.call(this) || this;
-        _this.base_account = base_account;
-        _this.original_vesting = original_vesting;
-        _this.delegated_free = delegated_free;
-        _this.delegated_vesting = delegated_vesting;
-        _this.end_time = end_time;
-        return _this;
+    constructor(base_account, original_vesting, delegated_free, delegated_vesting, end_time) {
+        super();
+        this.base_account = base_account;
+        this.original_vesting = original_vesting;
+        this.delegated_free = delegated_free;
+        this.delegated_vesting = delegated_vesting;
+        this.end_time = end_time;
     }
-    BaseVestingAccount.prototype.getAccountNumber = function () {
+    getAccountNumber() {
         return this.base_account.account_number;
-    };
-    BaseVestingAccount.prototype.getSequenceNumber = function () {
+    }
+    getSequenceNumber() {
         return this.base_account.sequence;
-    };
-    BaseVestingAccount.prototype.getPublicKey = function () {
+    }
+    getPublicKey() {
         return this.base_account.public_key;
-    };
-    BaseVestingAccount.prototype.toAmino = function (isClassic) {
-        var _a = this, base_account = _a.base_account, original_vesting = _a.original_vesting, delegated_free = _a.delegated_free, delegated_vesting = _a.delegated_vesting, end_time = _a.end_time;
+    }
+    toAmino(isClassic) {
+        const { base_account, original_vesting, delegated_free, delegated_vesting, end_time, } = this;
         return {
             type: isClassic
                 ? 'core/BaseVestingAccount'
@@ -100,17 +72,17 @@ var BaseVestingAccount = /** @class */ (function (_super) {
                 original_vesting: original_vesting.toAmino(),
             },
         };
-    };
-    BaseVestingAccount.fromAmino = function (amino, isClassic) {
-        var base_account = BaseAccount_1.BaseAccount.fromAmino({
+    }
+    static fromAmino(amino, isClassic) {
+        const base_account = BaseAccount_1.BaseAccount.fromAmino({
             type: isClassic ? 'core/Account' : 'cosmos-sdk/BaseAccount',
             value: amino.value.base_account,
         });
         return new BaseVestingAccount(base_account, Coins_1.Coins.fromAmino(amino.value.original_vesting), Coins_1.Coins.fromAmino(amino.value.delegated_free), Coins_1.Coins.fromAmino(amino.value.delegated_vesting), Number.parseInt(amino.value.end_time));
-    };
-    BaseVestingAccount.prototype.toData = function (_) {
+    }
+    toData(_) {
         _;
-        var _a = this, base_account = _a.base_account, original_vesting = _a.original_vesting, delegated_free = _a.delegated_free, delegated_vesting = _a.delegated_vesting, end_time = _a.end_time;
+        const { base_account, original_vesting, delegated_free, delegated_vesting, end_time, } = this;
         return {
             '@type': '/cosmos.vesting.v1beta1.BaseVestingAccount',
             base_account: base_account.toData(),
@@ -119,15 +91,15 @@ var BaseVestingAccount = /** @class */ (function (_super) {
             end_time: end_time.toFixed(),
             original_vesting: original_vesting.toData(),
         };
-    };
-    BaseVestingAccount.fromData = function (data, _) {
+    }
+    static fromData(data, _) {
         _;
-        var base_account = BaseAccount_1.BaseAccount.fromData(__assign({ '@type': '/cosmos.auth.v1beta1.BaseAccount' }, data.base_account));
+        const base_account = BaseAccount_1.BaseAccount.fromData(Object.assign({ '@type': '/cosmos.auth.v1beta1.BaseAccount' }, data.base_account));
         return new BaseVestingAccount(base_account, Coins_1.Coins.fromData(data.original_vesting), Coins_1.Coins.fromData(data.delegated_free), Coins_1.Coins.fromData(data.delegated_vesting), Number.parseInt(data.end_time));
-    };
-    BaseVestingAccount.prototype.toProto = function (_) {
+    }
+    toProto(_) {
         _;
-        var _a = this, base_account = _a.base_account, original_vesting = _a.original_vesting, delegated_free = _a.delegated_free, delegated_vesting = _a.delegated_vesting, end_time = _a.end_time;
+        const { base_account, original_vesting, delegated_free, delegated_vesting, end_time, } = this;
         return vesting_1.BaseVestingAccount.fromPartial({
             baseAccount: base_account.toProto(),
             delegatedFree: delegated_free.toProto(),
@@ -135,13 +107,12 @@ var BaseVestingAccount = /** @class */ (function (_super) {
             endTime: Long.fromNumber(end_time),
             originalVesting: original_vesting.toProto(),
         });
-    };
-    BaseVestingAccount.fromProto = function (proto, _) {
+    }
+    static fromProto(proto, _) {
         _;
-        var baseAccount = BaseAccount_1.BaseAccount.fromProto(proto.baseAccount);
+        const baseAccount = BaseAccount_1.BaseAccount.fromProto(proto.baseAccount);
         return new BaseVestingAccount(baseAccount, Coins_1.Coins.fromProto(proto.originalVesting), Coins_1.Coins.fromProto(proto.delegatedFree), Coins_1.Coins.fromProto(proto.delegatedVesting), proto.endTime.toNumber());
-    };
-    return BaseVestingAccount;
-}(json_1.JSONSerializable));
+    }
+}
 exports.BaseVestingAccount = BaseVestingAccount;
 //# sourceMappingURL=BaseVestingAccount.js.map

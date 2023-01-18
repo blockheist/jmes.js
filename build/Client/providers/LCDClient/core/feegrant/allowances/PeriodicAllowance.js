@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,18 +24,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PeriodicAllowance = void 0;
-var json_1 = require("../../../util/json");
-var Coins_1 = require("../../Coins");
-var BasicAllowance_1 = require("./BasicAllowance");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var feegrant_1 = require("@terra-money/terra.proto/cosmos/feegrant/v1beta1/feegrant");
-var Long = __importStar(require("long"));
+const json_1 = require("../../../util/json");
+const Coins_1 = require("../../Coins");
+const BasicAllowance_1 = require("./BasicAllowance");
+const any_1 = require("@terra-money/terra.proto/google/protobuf/any");
+const feegrant_1 = require("@terra-money/terra.proto/cosmos/feegrant/v1beta1/feegrant");
+const Long = __importStar(require("long"));
 /**
  * PeriodicAllowance extends Allowance to allow for both a maximum cap,
  * as well as a limit per time period.
  */
-var PeriodicAllowance = /** @class */ (function (_super) {
-    __extends(PeriodicAllowance, _super);
+class PeriodicAllowance extends json_1.JSONSerializable {
     /**
      * @param basic basic allowance given per period
      * @param period the time duration in which period_spend_limit coins can be spent before that allowance is reset
@@ -58,21 +42,20 @@ var PeriodicAllowance = /** @class */ (function (_super) {
      * @param period_can_spend the number of coins left to be spent before the period_reset time
      * @param period_reset the time at which this period resets and a new one begins
      */
-    function PeriodicAllowance(basic, period, period_spend_limit, period_can_spend, period_reset) {
-        var _this = _super.call(this) || this;
-        _this.basic = basic;
-        _this.period = period;
-        _this.period_reset = period_reset;
-        _this.period_spend_limit = new Coins_1.Coins(period_spend_limit);
-        _this.period_can_spend = new Coins_1.Coins(period_can_spend);
-        return _this;
+    constructor(basic, period, period_spend_limit, period_can_spend, period_reset) {
+        super();
+        this.basic = basic;
+        this.period = period;
+        this.period_reset = period_reset;
+        this.period_spend_limit = new Coins_1.Coins(period_spend_limit);
+        this.period_can_spend = new Coins_1.Coins(period_can_spend);
     }
-    PeriodicAllowance.fromAmino = function (data, isClassic) {
-        var _a = data.value, basic = _a.basic, period = _a.period, period_spend_limit = _a.period_spend_limit, period_can_spend = _a.period_can_spend, period_reset = _a.period_reset;
+    static fromAmino(data, isClassic) {
+        const { value: { basic, period, period_spend_limit, period_can_spend, period_reset, }, } = data;
         return new PeriodicAllowance(BasicAllowance_1.BasicAllowance.fromAmino(basic, isClassic), Number.parseInt(period), Coins_1.Coins.fromAmino(period_spend_limit), Coins_1.Coins.fromAmino(period_can_spend), new Date(period_reset));
-    };
-    PeriodicAllowance.prototype.toAmino = function (isClassic) {
-        var _a = this, basic = _a.basic, period = _a.period, period_spend_limit = _a.period_spend_limit, period_can_spend = _a.period_can_spend, period_reset = _a.period_reset;
+    }
+    toAmino(isClassic) {
+        const { basic, period, period_spend_limit, period_can_spend, period_reset, } = this;
         return {
             type: isClassic
                 ? 'feegrant/PeriodicAllowance'
@@ -85,15 +68,15 @@ var PeriodicAllowance = /** @class */ (function (_super) {
                 period_reset: period_reset.toISOString().replace(/\.000Z$/, 'Z'),
             },
         };
-    };
-    PeriodicAllowance.fromData = function (proto, _) {
+    }
+    static fromData(proto, _) {
         _;
-        var basic = proto.basic, period = proto.period, period_spend_limit = proto.period_spend_limit, period_can_spend = proto.period_can_spend, period_reset = proto.period_reset;
+        const { basic, period, period_spend_limit, period_can_spend, period_reset, } = proto;
         return new PeriodicAllowance(BasicAllowance_1.BasicAllowance.fromData(basic), Number.parseInt(period), Coins_1.Coins.fromData(period_spend_limit), Coins_1.Coins.fromData(period_can_spend), new Date(period_reset));
-    };
-    PeriodicAllowance.prototype.toData = function (_) {
+    }
+    toData(_) {
         _;
-        var _a = this, basic = _a.basic, period = _a.period, period_spend_limit = _a.period_spend_limit, period_can_spend = _a.period_can_spend, period_reset = _a.period_reset;
+        const { basic, period, period_spend_limit, period_can_spend, period_reset, } = this;
         return {
             '@type': '/cosmos.feegrant.v1beta1.PeriodicAllowance',
             basic: basic.toData(),
@@ -102,33 +85,32 @@ var PeriodicAllowance = /** @class */ (function (_super) {
             period_can_spend: period_can_spend.toData(),
             period_reset: period_reset.toISOString().replace(/\.000Z$/, 'Z'),
         };
-    };
-    PeriodicAllowance.fromProto = function (proto, _) {
+    }
+    static fromProto(proto, _) {
         var _a;
         _;
         return new PeriodicAllowance(BasicAllowance_1.BasicAllowance.fromProto(proto.basic), (_a = proto.period) === null || _a === void 0 ? void 0 : _a.seconds.toNumber(), Coins_1.Coins.fromProto(proto.periodSpendLimit), Coins_1.Coins.fromProto(proto.periodCanSpend), proto.periodReset);
-    };
-    PeriodicAllowance.prototype.toProto = function (_) {
+    }
+    toProto(_) {
         _;
-        var _a = this, basic = _a.basic, period = _a.period, period_spend_limit = _a.period_spend_limit, period_can_spend = _a.period_can_spend, period_reset = _a.period_reset;
+        const { basic, period, period_spend_limit, period_can_spend, period_reset, } = this;
         return feegrant_1.PeriodicAllowance.fromPartial({
-            basic: basic,
+            basic,
             period: { seconds: Long.fromNumber(period) },
             periodCanSpend: period_can_spend.toProto(),
             periodReset: period_reset,
             periodSpendLimit: period_spend_limit.toProto(),
         });
-    };
-    PeriodicAllowance.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         return any_1.Any.fromPartial({
             typeUrl: '/cosmos.feegrant.v1beta1.PeriodicAllowance',
             value: feegrant_1.PeriodicAllowance.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    PeriodicAllowance.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         return PeriodicAllowance.fromProto(feegrant_1.PeriodicAllowance.decode(msgAny.value), isClassic);
-    };
-    return PeriodicAllowance;
-}(json_1.JSONSerializable));
+    }
+}
 exports.PeriodicAllowance = PeriodicAllowance;
 //# sourceMappingURL=PeriodicAllowance.js.map

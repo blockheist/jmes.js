@@ -1,28 +1,13 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MsgEditValidator = void 0;
-var json_1 = require("../../../util/json");
-var numeric_1 = require("../../numeric");
-var Validator_1 = require("../Validator");
+const json_1 = require("../../../util/json");
+const numeric_1 = require("../../numeric");
+const Validator_1 = require("../Validator");
 // import { Any } from '@terra-money/legacy.proto/google/protobuf/any';
 // import { MsgEditValidator as MsgEditValidator_pb } from '@terra-money/legacy.proto/cosmos/staking/v1beta1/tx';
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var tx_1 = require("@terra-money/terra.proto/cosmos/staking/v1beta1/tx");
+const any_1 = require("@terra-money/terra.proto/google/protobuf/any");
+const tx_1 = require("@terra-money/terra.proto/cosmos/staking/v1beta1/tx");
 /**
  * A validator can edit its delegate information, such as moniker, website, commission
  * rate, etc.
@@ -31,36 +16,34 @@ var tx_1 = require("@terra-money/terra.proto/cosmos/staking/v1beta1/tx");
  * field untouched. For `Description`,` you should start with [[MsgEditValidator.DESC_DO_NOT_MODIFY]] and
  * change each field you wish to modify individually.
  */
-var MsgEditValidator = /** @class */ (function (_super) {
-    __extends(MsgEditValidator, _super);
+class MsgEditValidator extends json_1.JSONSerializable {
     /**
      * @param Description new description to apply
      * @param address new address to apply
      * @param commission_rate new commission rates to apply
      * @param min_self_delegation new min self delegation
      */
-    function MsgEditValidator(description, validator_address, commission_rate, min_self_delegation) {
-        var _this = _super.call(this) || this;
-        _this.description = description;
-        _this.validator_address = validator_address;
-        _this.commission_rate = commission_rate;
-        _this.min_self_delegation = min_self_delegation;
-        return _this;
+    constructor(description, validator_address, commission_rate, min_self_delegation) {
+        super();
+        this.description = description;
+        this.validator_address = validator_address;
+        this.commission_rate = commission_rate;
+        this.min_self_delegation = min_self_delegation;
     }
-    MsgEditValidator.fromAmino = function (data, _) {
+    static fromAmino(data, _) {
         _;
-        var _a = data.value, description = _a.description, validator_address = _a.validator_address, commission_rate = _a.commission_rate, min_self_delegation = _a.min_self_delegation;
+        const { value: { description, validator_address, commission_rate, min_self_delegation, }, } = data;
         return new MsgEditValidator(Validator_1.Validator.Description.fromAmino(description), validator_address, commission_rate ? new numeric_1.Dec(commission_rate) : undefined, min_self_delegation ? new numeric_1.Int(min_self_delegation) : undefined);
-    };
-    MsgEditValidator.prototype.toAmino = function (isClassic) {
-        var _a = this, description = _a.description, validator_address = _a.validator_address, commission_rate = _a.commission_rate, min_self_delegation = _a.min_self_delegation;
+    }
+    toAmino(isClassic) {
+        const { description, validator_address, commission_rate, min_self_delegation, } = this;
         return {
             type: isClassic
                 ? 'staking/MsgEditValidator'
                 : 'cosmos-sdk/MsgEditValidator',
             value: {
-                description: description,
-                validator_address: validator_address,
+                description,
+                validator_address,
                 commission_rate: commission_rate
                     ? commission_rate.toString()
                     : undefined,
@@ -69,52 +52,51 @@ var MsgEditValidator = /** @class */ (function (_super) {
                     : undefined,
             },
         };
-    };
-    MsgEditValidator.fromProto = function (data, _) {
+    }
+    static fromProto(data, _) {
         _;
         return new MsgEditValidator(Validator_1.Validator.Description.fromProto(data.description), data.validatorAddress, data.commissionRate !== '' ? new numeric_1.Dec(data.commissionRate) : undefined, data.minSelfDelegation !== ''
             ? new numeric_1.Int(data.minSelfDelegation)
             : undefined);
-    };
-    MsgEditValidator.prototype.toProto = function (_) {
+    }
+    toProto(_) {
         _;
-        var _a = this, description = _a.description, validator_address = _a.validator_address, commission_rate = _a.commission_rate, min_self_delegation = _a.min_self_delegation;
+        const { description, validator_address, commission_rate, min_self_delegation, } = this;
         return tx_1.MsgEditValidator.fromPartial({
             description: description.toProto(),
             commissionRate: (commission_rate === null || commission_rate === void 0 ? void 0 : commission_rate.toString()) || '',
             minSelfDelegation: (min_self_delegation === null || min_self_delegation === void 0 ? void 0 : min_self_delegation.toString()) || '',
             validatorAddress: validator_address,
         });
-    };
-    MsgEditValidator.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         return any_1.Any.fromPartial({
             typeUrl: '/cosmos.staking.v1beta1.MsgEditValidator',
             value: tx_1.MsgEditValidator.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    MsgEditValidator.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         return MsgEditValidator.fromProto(tx_1.MsgEditValidator.decode(msgAny.value), isClassic);
-    };
-    MsgEditValidator.fromData = function (data, _) {
+    }
+    static fromData(data, _) {
         _;
-        var description = data.description, validator_address = data.validator_address, commission_rate = data.commission_rate, min_self_delegation = data.min_self_delegation;
+        const { description, validator_address, commission_rate, min_self_delegation, } = data;
         return new MsgEditValidator(Validator_1.Validator.Description.fromData(description), validator_address, commission_rate ? new numeric_1.Dec(commission_rate) : undefined, min_self_delegation ? new numeric_1.Int(min_self_delegation) : undefined);
-    };
-    MsgEditValidator.prototype.toData = function (_) {
+    }
+    toData(_) {
         _;
-        var _a = this, description = _a.description, validator_address = _a.validator_address, commission_rate = _a.commission_rate, min_self_delegation = _a.min_self_delegation;
+        const { description, validator_address, commission_rate, min_self_delegation, } = this;
         return {
             '@type': '/cosmos.staking.v1beta1.MsgEditValidator',
-            description: description,
-            validator_address: validator_address,
+            description,
+            validator_address,
             commission_rate: commission_rate ? commission_rate.toString() : undefined,
             min_self_delegation: min_self_delegation
                 ? min_self_delegation.toString()
                 : undefined,
         };
-    };
-    return MsgEditValidator;
-}(json_1.JSONSerializable));
+    }
+}
 exports.MsgEditValidator = MsgEditValidator;
 (function (MsgEditValidator) {
     MsgEditValidator.DESC_DO_NOT_MODIFY = {
@@ -125,5 +107,4 @@ exports.MsgEditValidator = MsgEditValidator;
         security_contact: '[do-not-modify]',
     };
 })(MsgEditValidator = exports.MsgEditValidator || (exports.MsgEditValidator = {}));
-exports.MsgEditValidator = MsgEditValidator;
 //# sourceMappingURL=MsgEditValidator.js.map

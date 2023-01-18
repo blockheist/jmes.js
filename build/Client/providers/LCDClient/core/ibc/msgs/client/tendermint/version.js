@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,106 +24,100 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = exports.Consensus = void 0;
-var types_1 = require("@terra-money/terra.proto/tendermint/version/types");
-var types_2 = require("@terra-money/terra.proto/tendermint/version/types");
-var Long = __importStar(require("long"));
-var json_1 = require("../../../../../util/json");
+const types_1 = require("@terra-money/terra.proto/tendermint/version/types");
+const types_2 = require("@terra-money/terra.proto/tendermint/version/types");
+const Long = __importStar(require("long"));
+const json_1 = require("../../../../../util/json");
 /**
  * Consensus captures the consensus rules for processing a block in the blockchain,
  * including all blockchain data structures and the rules of the application's
  * state transition machine.
  */
-var Consensus = /** @class */ (function (_super) {
-    __extends(Consensus, _super);
+class Consensus extends json_1.JSONSerializable {
     /**
      * @param block
      * @param app
      */
-    function Consensus(block, app) {
-        var _this = _super.call(this) || this;
-        _this.block = block;
-        _this.app = app;
-        return _this;
+    constructor(block, app) {
+        super();
+        this.block = block;
+        this.app = app;
     }
-    Consensus.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    Consensus.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    Consensus.fromData = function (data) {
-        var block = data.block, app = data.app;
+    }
+    static fromData(data) {
+        const { block, app } = data;
         return new Consensus(Number.parseInt(block), Number.parseInt(app));
-    };
-    Consensus.prototype.toData = function () {
-        var _a = this, block = _a.block, app = _a.app;
-        var res = {
+    }
+    toData() {
+        const { block, app } = this;
+        const res = {
             block: block.toFixed(),
             app: app.toFixed(),
         };
         return res;
-    };
-    Consensus.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new Consensus(proto.block.toNumber(), proto.app.toNumber());
-    };
-    Consensus.prototype.toProto = function () {
-        var _a = this, block = _a.block, app = _a.app;
+    }
+    toProto() {
+        const { block, app } = this;
         return types_1.Consensus.fromPartial({
             block: Long.fromNumber(block),
             app: Long.fromNumber(app),
         });
-    };
-    return Consensus;
-}(json_1.JSONSerializable));
+    }
+}
 exports.Consensus = Consensus;
 /**
  * App captures the consensus rules for processing a block in the blockchain,
  * including all blockchain data structures and the rules of the application's
  * state transition machine.
  */
-var App = /** @class */ (function (_super) {
-    __extends(App, _super);
+class App extends json_1.JSONSerializable {
     /**
      * @param protocol
      * @param software
      */
-    function App(protocol, software) {
-        var _this = _super.call(this) || this;
-        _this.protocol = protocol;
-        _this.software = software;
-        return _this;
+    constructor(protocol, software) {
+        super();
+        this.protocol = protocol;
+        this.software = software;
     }
-    App.fromAmino = function (_) {
+    static fromAmino(_) {
         _;
         throw new Error('Amino not supported');
-    };
-    App.prototype.toAmino = function () {
+    }
+    toAmino() {
         throw new Error('Amino not supported');
-    };
-    App.fromData = function (data) {
-        var protocol = data.protocol, software = data.software;
+    }
+    static fromData(data) {
+        const { protocol, software } = data;
         return new App(Number.parseInt(protocol), software);
-    };
-    App.prototype.toData = function () {
-        var _a = this, protocol = _a.protocol, software = _a.software;
-        var res = {
+    }
+    toData() {
+        const { protocol, software } = this;
+        const res = {
             protocol: protocol.toFixed(),
             software: software,
         };
         return res;
-    };
-    App.fromProto = function (proto) {
+    }
+    static fromProto(proto) {
         return new App(proto.protocol.toNumber(), proto.software);
-    };
-    App.prototype.toProto = function () {
-        var _a = this, protocol = _a.protocol, software = _a.software;
+    }
+    toProto() {
+        const { protocol, software } = this;
         return types_2.App.fromPartial({
             protocol: Long.fromNumber(protocol),
             software: software,
         });
-    };
-    return App;
-}(json_1.JSONSerializable));
+    }
+}
 exports.App = App;
 //# sourceMappingURL=version.js.map

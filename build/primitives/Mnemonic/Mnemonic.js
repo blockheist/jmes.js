@@ -24,45 +24,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mnemonic = void 0;
-var crypto = __importStar(require("crypto"));
-var ethers_1 = require("ethers");
-var bip39 = __importStar(require("bip39"));
-var DerivableKey_1 = require("../DerivableKey");
-var bip32 = __importStar(require("@scure/bip32"));
-var Mnemonic = /** @class */ (function () {
-    function Mnemonic(mnemonic, password) {
+const crypto = __importStar(require("crypto"));
+const ethers_1 = require("ethers");
+const bip39 = __importStar(require("bip39"));
+const DerivableKey_1 = require("../DerivableKey");
+const bip32 = __importStar(require("@scure/bip32"));
+class Mnemonic {
+    constructor(mnemonic, password) {
         this.mnemonic = (mnemonic) ? mnemonic : Mnemonic.generateMnemonic();
         // FIXME: that's bad. Only valid for dev times...
         this.password = password !== null && password !== void 0 ? password : null;
     }
-    Mnemonic.generateMnemonic = function (overwroteRandomBytes) {
-        if (overwroteRandomBytes === void 0) { overwroteRandomBytes = null; }
-        var getRandomValuesFn = (crypto && crypto.webcrypto)
+    static generateMnemonic(overwroteRandomBytes = null) {
+        const getRandomValuesFn = (crypto && crypto.webcrypto)
             // FIX: Binding done to fix specific issue with nodev18 (https://github.com/cloudflare/miniflare/pull/216)
             ? crypto.webcrypto.getRandomValues.bind(crypto.webcrypto)
             : crypto.getRandomValues;
-        var uintArray = new Uint8Array(32);
+        const uintArray = new Uint8Array(32);
         // @ts-ignore
-        var randomBytes = (overwroteRandomBytes !== null) ? overwroteRandomBytes : getRandomValuesFn(uintArray);
+        const randomBytes = (overwroteRandomBytes !== null) ? overwroteRandomBytes : getRandomValuesFn(uintArray);
         // @ts-ignore
-        var mnemonic = ethers_1.ethers.utils.entropyToMnemonic(randomBytes);
+        const mnemonic = ethers_1.ethers.utils.entropyToMnemonic(randomBytes);
         return mnemonic;
-    };
-    Mnemonic.mnemonicToSeed = function (mnemonic, password) {
+    }
+    static mnemonicToSeed(mnemonic, password) {
         return (password) ? bip39.mnemonicToSeedSync(mnemonic, password) : bip39.mnemonicToSeedSync(mnemonic);
-    };
-    Mnemonic.prototype.toSeed = function () {
+    }
+    toSeed() {
         return Mnemonic.mnemonicToSeed(this.mnemonic, this.password);
-    };
+    }
     // @ts-ignore
-    Mnemonic.prototype.toMasterDerivableKey = function (opts) {
-        if (opts === void 0) { opts = { account: 0, index: 0 }; }
-        var seed = this.toSeed();
-        var masterKey = bip32.HDKey.fromMasterSeed(seed);
+    toMasterDerivableKey(opts = { account: 0, index: 0 }) {
+        const seed = this.toSeed();
+        const masterKey = bip32.HDKey.fromMasterSeed(seed);
         return new DerivableKey_1.DerivableKey(masterKey);
-    };
-    return Mnemonic;
-}());
+    }
+}
 exports.Mnemonic = Mnemonic;
 ;
 //# sourceMappingURL=Mnemonic.js.map

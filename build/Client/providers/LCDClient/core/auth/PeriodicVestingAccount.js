@@ -1,30 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -50,104 +24,99 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PeriodicVestingAccount = void 0;
-var json_1 = require("../../util/json");
-var BaseVestingAccount_1 = require("./BaseVestingAccount");
-var Coins_1 = require("../Coins");
-var vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
-var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
-var Long = __importStar(require("long"));
+const json_1 = require("../../util/json");
+const BaseVestingAccount_1 = require("./BaseVestingAccount");
+const Coins_1 = require("../Coins");
+const vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
+const any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+const Long = __importStar(require("long"));
 /**
  * PeriodicVestingAccount implements the VestingAccount interface. It
  * periodically vests by unlocking coins during each specified period.
  */
-var PeriodicVestingAccount = /** @class */ (function (_super) {
-    __extends(PeriodicVestingAccount, _super);
+class PeriodicVestingAccount extends json_1.JSONSerializable {
     /**
      *
      * @param base_vesting_account account information
      * @param start_time vesting start time
      * @param vesting_periods vesting period entries
      */
-    function PeriodicVestingAccount(base_vesting_account, start_time, vesting_periods) {
-        var _this = _super.call(this) || this;
-        _this.base_vesting_account = base_vesting_account;
-        _this.start_time = start_time;
-        _this.vesting_periods = vesting_periods;
-        return _this;
+    constructor(base_vesting_account, start_time, vesting_periods) {
+        super();
+        this.base_vesting_account = base_vesting_account;
+        this.start_time = start_time;
+        this.vesting_periods = vesting_periods;
     }
-    PeriodicVestingAccount.prototype.getAccountNumber = function () {
+    getAccountNumber() {
         return this.base_vesting_account.getAccountNumber();
-    };
-    PeriodicVestingAccount.prototype.getSequenceNumber = function () {
+    }
+    getSequenceNumber() {
         return this.base_vesting_account.getSequenceNumber();
-    };
-    PeriodicVestingAccount.prototype.getPublicKey = function () {
+    }
+    getPublicKey() {
         return this.base_vesting_account.base_account.public_key;
-    };
-    PeriodicVestingAccount.prototype.toAmino = function (isClassic) {
+    }
+    toAmino(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, base_vesting_account = _a.base_vesting_account, start_time = _a.start_time, vesting_periods = _a.vesting_periods;
+        const { base_vesting_account, start_time, vesting_periods } = this;
         return {
             type: 'cosmos-sdk/PeriodicVestingAccount',
             value: {
                 base_vesting_account: base_vesting_account.toAmino().value,
                 start_time: start_time.toFixed(),
-                vesting_periods: vesting_periods.map(function (vs) { return vs.toAmino(); }),
+                vesting_periods: vesting_periods.map(vs => vs.toAmino()),
             },
         };
-    };
-    PeriodicVestingAccount.fromAmino = function (data, isClassic) {
-        var base_vesting_account = BaseVestingAccount_1.BaseVestingAccount.fromAmino({
+    }
+    static fromAmino(data, isClassic) {
+        const base_vesting_account = BaseVestingAccount_1.BaseVestingAccount.fromAmino({
             type: 'cosmos-sdk/BaseVestingAccount',
             value: data.value.base_vesting_account,
         });
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        return new PeriodicVestingAccount(base_vesting_account, Number.parseInt(data.value.start_time), data.value.vesting_periods.map(function (vs) {
-            return PeriodicVestingAccount.Period.fromAmino(vs);
-        }));
-    };
-    PeriodicVestingAccount.prototype.toData = function (isClassic) {
+        return new PeriodicVestingAccount(base_vesting_account, Number.parseInt(data.value.start_time), data.value.vesting_periods.map(vs => PeriodicVestingAccount.Period.fromAmino(vs)));
+    }
+    toData(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, base_vesting_account = _a.base_vesting_account, start_time = _a.start_time, vesting_periods = _a.vesting_periods;
+        const { base_vesting_account, start_time, vesting_periods } = this;
         return {
             '@type': '/cosmos.vesting.v1beta1.PeriodicVestingAccount',
             base_vesting_account: base_vesting_account.toData(),
             start_time: start_time.toFixed(),
-            vesting_periods: vesting_periods.map(function (vs) { return vs.toData(); }),
+            vesting_periods: vesting_periods.map(vs => vs.toData()),
         };
-    };
-    PeriodicVestingAccount.fromData = function (data, isClassic) {
-        var base_vesting_account = BaseVestingAccount_1.BaseVestingAccount.fromData(__assign({ '@type': '/cosmos.vesting.v1beta1.BaseVestingAccount' }, data.base_vesting_account));
+    }
+    static fromData(data, isClassic) {
+        const base_vesting_account = BaseVestingAccount_1.BaseVestingAccount.fromData(Object.assign({ '@type': '/cosmos.vesting.v1beta1.BaseVestingAccount' }, data.base_vesting_account));
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        return new PeriodicVestingAccount(base_vesting_account, Number.parseInt(data.start_time), data.vesting_periods.map(function (vs) { return PeriodicVestingAccount.Period.fromData(vs); }));
-    };
-    PeriodicVestingAccount.prototype.toProto = function (isClassic) {
+        return new PeriodicVestingAccount(base_vesting_account, Number.parseInt(data.start_time), data.vesting_periods.map(vs => PeriodicVestingAccount.Period.fromData(vs)));
+    }
+    toProto(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, base_vesting_account = _a.base_vesting_account, vesting_periods = _a.vesting_periods;
+        const { base_vesting_account, vesting_periods } = this;
         return vesting_1.PeriodicVestingAccount.fromPartial({
             baseVestingAccount: base_vesting_account.toProto(),
-            vestingPeriods: vesting_periods.map(function (s) { return s.toProto(); }),
+            vestingPeriods: vesting_periods.map(s => s.toProto()),
         });
-    };
-    PeriodicVestingAccount.fromProto = function (proto, isClassic) {
-        var _this = this;
+    }
+    static fromProto(proto, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
-        var baseVestingAccount = BaseVestingAccount_1.BaseVestingAccount.fromProto(proto.baseVestingAccount);
-        return new PeriodicVestingAccount(baseVestingAccount, proto.startTime.toNumber(), proto.vestingPeriods.map(function (s) { return _this.Period.fromProto(s); }));
-    };
-    PeriodicVestingAccount.prototype.packAny = function (isClassic) {
+        const baseVestingAccount = BaseVestingAccount_1.BaseVestingAccount.fromProto(proto.baseVestingAccount);
+        return new PeriodicVestingAccount(baseVestingAccount, proto.startTime.toNumber(), proto.vestingPeriods.map(s => this.Period.fromProto(s)));
+    }
+    packAny(isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -155,60 +124,55 @@ var PeriodicVestingAccount = /** @class */ (function (_super) {
             typeUrl: '/cosmos.vesting.v1beta1.PeriodicVestingAccount',
             value: vesting_1.PeriodicVestingAccount.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    PeriodicVestingAccount.unpackAny = function (pubkeyAny, isClassic) {
+    }
+    static unpackAny(pubkeyAny, isClassic) {
         if (isClassic) {
             throw new Error('Not supported for the network');
         }
         return PeriodicVestingAccount.fromProto(vesting_1.PeriodicVestingAccount.decode(pubkeyAny.value), isClassic);
-    };
-    return PeriodicVestingAccount;
-}(json_1.JSONSerializable));
+    }
+}
 exports.PeriodicVestingAccount = PeriodicVestingAccount;
 (function (PeriodicVestingAccount) {
-    var Period = /** @class */ (function (_super) {
-        __extends(Period, _super);
-        function Period(length, amount) {
-            var _this = _super.call(this) || this;
-            _this.length = length;
-            _this.amount = amount;
-            return _this;
+    class Period extends json_1.JSONSerializable {
+        constructor(length, amount) {
+            super();
+            this.length = length;
+            this.amount = amount;
         }
-        Period.prototype.toAmino = function () {
-            var _a = this, length = _a.length, amount = _a.amount;
+        toAmino() {
+            const { length, amount } = this;
             return {
                 length: length.toFixed(),
                 amount: amount.toAmino(),
             };
-        };
-        Period.fromAmino = function (data) {
-            var length = data.length, amount = data.amount;
+        }
+        static fromAmino(data) {
+            const { length, amount } = data;
             return new Period(Number.parseInt(length), Coins_1.Coins.fromAmino(amount));
-        };
-        Period.prototype.toData = function () {
-            var _a = this, length = _a.length, amount = _a.amount;
+        }
+        toData() {
+            const { length, amount } = this;
             return {
                 length: length.toFixed(),
                 amount: amount.toData(),
             };
-        };
-        Period.fromData = function (data) {
-            var length = data.length, amount = data.amount;
+        }
+        static fromData(data) {
+            const { length, amount } = data;
             return new Period(Number.parseInt(length), Coins_1.Coins.fromData(amount));
-        };
-        Period.prototype.toProto = function () {
-            var _a = this, length = _a.length, amount = _a.amount;
+        }
+        toProto() {
+            const { length, amount } = this;
             return vesting_1.Period.fromPartial({
                 length: Long.fromNumber(length),
                 amount: amount.toProto(),
             });
-        };
-        Period.fromProto = function (proto) {
+        }
+        static fromProto(proto) {
             return new Period(proto.length.toNumber(), Coins_1.Coins.fromProto(proto.amount));
-        };
-        return Period;
-    }(json_1.JSONSerializable));
+        }
+    }
     PeriodicVestingAccount.Period = Period;
 })(PeriodicVestingAccount = exports.PeriodicVestingAccount || (exports.PeriodicVestingAccount = {}));
-exports.PeriodicVestingAccount = PeriodicVestingAccount;
 //# sourceMappingURL=PeriodicVestingAccount.js.map

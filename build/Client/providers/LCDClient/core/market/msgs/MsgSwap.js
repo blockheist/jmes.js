@@ -1,83 +1,66 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MsgSwap = void 0;
-var json_1 = require("../../../util/json");
-var Coin_1 = require("../../Coin");
-var tx_1 = require("@terra-money/legacy.proto/terra/market/v1beta1/tx");
-var any_1 = require("@terra-money/legacy.proto/google/protobuf/any");
+const json_1 = require("../../../util/json");
+const Coin_1 = require("../../Coin");
+const tx_1 = require("@terra-money/legacy.proto/terra/market/v1beta1/tx");
+const any_1 = require("@terra-money/legacy.proto/google/protobuf/any");
 /**
  * Executes a market swap between 2 denominations at the exchange rate registered by the
  * Oracle module. The account will lose the amount of coins offered, and receive funds
  * in the requested denomination after a swap fee has been applied.
  */
-var MsgSwap = /** @class */ (function (_super) {
-    __extends(MsgSwap, _super);
+class MsgSwap extends json_1.JSONSerializable {
     /**
      * @param trader trader's account address
      * @param offer_coin coin to be swapped (from)
      * @param ask_denom desired denomination (to)
      */
-    function MsgSwap(trader, offer_coin, ask_denom) {
-        var _this = _super.call(this) || this;
-        _this.trader = trader;
-        _this.offer_coin = offer_coin;
-        _this.ask_denom = ask_denom;
-        return _this;
+    constructor(trader, offer_coin, ask_denom) {
+        super();
+        this.trader = trader;
+        this.offer_coin = offer_coin;
+        this.ask_denom = ask_denom;
     }
-    MsgSwap.fromAmino = function (data, isClassic) {
+    static fromAmino(data, isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = data.value, trader = _a.trader, offer_coin = _a.offer_coin, ask_denom = _a.ask_denom;
+        const { value: { trader, offer_coin, ask_denom }, } = data;
         return new MsgSwap(trader, Coin_1.Coin.fromAmino(offer_coin), ask_denom);
-    };
-    MsgSwap.prototype.toAmino = function (isClassic) {
+    }
+    toAmino(isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, trader = _a.trader, offer_coin = _a.offer_coin, ask_denom = _a.ask_denom;
+        const { trader, offer_coin, ask_denom } = this;
         return {
             type: 'market/MsgSwap',
             value: {
-                trader: trader,
+                trader,
                 offer_coin: offer_coin.toAmino(),
-                ask_denom: ask_denom,
+                ask_denom,
             },
         };
-    };
-    MsgSwap.fromProto = function (proto, isClassic) {
+    }
+    static fromProto(proto, isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
         return new MsgSwap(proto.trader, Coin_1.Coin.fromProto(proto.offerCoin), proto.askDenom);
-    };
-    MsgSwap.prototype.toProto = function (isClassic) {
+    }
+    toProto(isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, trader = _a.trader, offer_coin = _a.offer_coin, ask_denom = _a.ask_denom;
+        const { trader, offer_coin, ask_denom } = this;
         return tx_1.MsgSwap.fromPartial({
             askDenom: ask_denom,
             offerCoin: offer_coin.toProto(),
-            trader: trader,
+            trader,
         });
-    };
-    MsgSwap.prototype.packAny = function (isClassic) {
+    }
+    packAny(isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
@@ -85,33 +68,32 @@ var MsgSwap = /** @class */ (function (_super) {
             typeUrl: '/terra.market.v1beta1.MsgSwap',
             value: tx_1.MsgSwap.encode(this.toProto(isClassic)).finish(),
         });
-    };
-    MsgSwap.unpackAny = function (msgAny, isClassic) {
+    }
+    static unpackAny(msgAny, isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
         return MsgSwap.fromProto(tx_1.MsgSwap.decode(msgAny.value), isClassic);
-    };
-    MsgSwap.fromData = function (data, isClassic) {
+    }
+    static fromData(data, isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
-        var trader = data.trader, offer_coin = data.offer_coin, ask_denom = data.ask_denom;
+        const { trader, offer_coin, ask_denom } = data;
         return new MsgSwap(trader, Coin_1.Coin.fromData(offer_coin), ask_denom);
-    };
-    MsgSwap.prototype.toData = function (isClassic) {
+    }
+    toData(isClassic) {
         if (!isClassic) {
             throw new Error('Not supported for the network');
         }
-        var _a = this, trader = _a.trader, offer_coin = _a.offer_coin, ask_denom = _a.ask_denom;
+        const { trader, offer_coin, ask_denom } = this;
         return {
             '@type': '/terra.market.v1beta1.MsgSwap',
-            trader: trader,
+            trader,
             offer_coin: offer_coin.toData(),
-            ask_denom: ask_denom,
+            ask_denom,
         };
-    };
-    return MsgSwap;
-}(json_1.JSONSerializable));
+    }
+}
 exports.MsgSwap = MsgSwap;
 //# sourceMappingURL=MsgSwap.js.map

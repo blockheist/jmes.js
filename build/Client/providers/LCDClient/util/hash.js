@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ripemd160 = exports.sha256 = exports.hashToHex = void 0;
-var SHA256_1 = require("jscrypto/SHA256");
-var RIPEMD160_1 = require("jscrypto/RIPEMD160");
-var Base64_1 = require("jscrypto/Base64");
-var jscrypto_1 = require("jscrypto");
+const SHA256_1 = require("jscrypto/SHA256");
+const RIPEMD160_1 = require("jscrypto/RIPEMD160");
+const Base64_1 = require("jscrypto/Base64");
+const jscrypto_1 = require("jscrypto");
 /*
 DEPRECATED (was used by crypto-js)
 function byteArrayToWordArray(ba: Uint8Array): CryptoJS.LibWordArray {

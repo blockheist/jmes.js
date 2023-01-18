@@ -1,31 +1,20 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LCDClient = void 0;
-var APIRequester_1 = require("./APIRequester");
-var api_1 = require("./api");
-var LCDUtils_1 = require("./LCDUtils");
-var Wallet_1 = require("./Wallet");
-var DEFAULT_LCD_OPTIONS = {
+const APIRequester_1 = require("./APIRequester");
+const api_1 = require("./api");
+const LCDUtils_1 = require("./LCDUtils");
+const Wallet_1 = require("./Wallet");
+const DEFAULT_LCD_OPTIONS = {
     gasAdjustment: 1.75,
 };
 // isClassic network: true
 // forked network : false
-var DEFAULT_NETWORK_TYPE_BY_CHAIN_ID = {
+const DEFAULT_NETWORK_TYPE_BY_CHAIN_ID = {
     default: false,
     'jmes-888': true
 };
-var DEFAULT_GAS_PRICES_BY_CHAIN_ID = {
+const DEFAULT_GAS_PRICES_BY_CHAIN_ID = {
     default: {
         ujmes: 0.15,
     },
@@ -50,14 +39,14 @@ var DEFAULT_GAS_PRICES_BY_CHAIN_ID = {
  * terra.market.swapRate(new Coin('ujmes', 10000), 'ukrw').then(c => console.log(c.toString()));
  * ```
  */
-var LCDClient = /** @class */ (function () {
+class LCDClient {
     /**
      * Creates a new LCD client with the specified configuration.
      *
      * @param config LCD configuration
      */
-    function LCDClient(config) {
-        this.config = __assign(__assign(__assign({}, DEFAULT_LCD_OPTIONS), { gasPrices: DEFAULT_GAS_PRICES_BY_CHAIN_ID[config.chainID] ||
+    constructor(config) {
+        this.config = Object.assign(Object.assign(Object.assign({}, DEFAULT_LCD_OPTIONS), { gasPrices: DEFAULT_GAS_PRICES_BY_CHAIN_ID[config.chainID] ||
                 DEFAULT_GAS_PRICES_BY_CHAIN_ID['default'], isClassic: DEFAULT_NETWORK_TYPE_BY_CHAIN_ID[config.chainID] ||
                 DEFAULT_NETWORK_TYPE_BY_CHAIN_ID['default'] }), config);
         this.apiRequester = new APIRequester_1.APIRequester(this.config.URL);
@@ -82,10 +71,9 @@ var LCDClient = /** @class */ (function () {
         this.utils = new LCDUtils_1.LCDUtils(this);
     }
     /** Creates a new wallet with the Key. */
-    LCDClient.prototype.wallet = function (key) {
+    wallet(key) {
         return new Wallet_1.Wallet(this, key);
-    };
-    return LCDClient;
-}());
+    }
+}
 exports.LCDClient = LCDClient;
 //# sourceMappingURL=LCDClient.js.map

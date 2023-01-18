@@ -1,31 +1,5 @@
 "use strict";
 // Adapted from https://github.com/terra-money/terra-js/blob/master/src/utils/keyUtils.ts
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -51,11 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MnemonicKey = exports.JMES_COIN_TYPE = void 0;
-var bip32 = __importStar(require("@scure/bip32"));
-var bip39 = __importStar(require("bip39"));
-var RawKey_1 = require("./RawKey");
+const bip32 = __importStar(require("@scure/bip32"));
+const bip39 = __importStar(require("bip39"));
+const RawKey_1 = require("./RawKey");
 exports.JMES_COIN_TYPE = 6280;
-var DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS = {
     account: 0,
     index: 0,
     coinType: exports.JMES_COIN_TYPE,
@@ -65,8 +39,7 @@ var DEFAULT_OPTIONS = {
  * that this implementation exposes the private key in memory, so it is not advised to use
  * for applications requiring high security.
  */
-var MnemonicKey = /** @class */ (function (_super) {
-    __extends(MnemonicKey, _super);
+class MnemonicKey extends RawKey_1.RawKey {
     /**
      * Creates a new signing key from a mnemonic phrase. If no mnemonic is provided, one
      * will be automatically generated.
@@ -89,29 +62,25 @@ var MnemonicKey = /** @class */ (function (_super) {
      *
      * @param options
      */
-    function MnemonicKey(options) {
-        if (options === void 0) { options = {}; }
-        var _this = this;
-        var _a = __assign(__assign({}, DEFAULT_OPTIONS), options), account = _a.account, index = _a.index, coinType = _a.coinType;
-        var mnemonic = options.mnemonic;
+    constructor(options = {}) {
+        const { account, index, coinType } = Object.assign(Object.assign({}, DEFAULT_OPTIONS), options);
+        let { mnemonic } = options;
         if (mnemonic === undefined) {
             mnemonic = bip39.generateMnemonic(256);
         }
-        var seed = bip39.mnemonicToSeedSync(mnemonic);
-        var masterKey = bip32.HDKey.fromMasterSeed(seed);
-        var hdPathLuna = "m/44'/".concat(coinType, "'/").concat(account, "'/0/").concat(index);
+        const seed = bip39.mnemonicToSeedSync(mnemonic);
+        const masterKey = bip32.HDKey.fromMasterSeed(seed);
+        const hdPathLuna = `m/44'/${coinType}'/${account}'/0/${index}`;
         // console.log({hdPathLuna});
-        var terraHD = masterKey.derive(hdPathLuna);
-        var privateKey = terraHD.privateKey;
+        const terraHD = masterKey.derive(hdPathLuna);
+        const privateKey = terraHD.privateKey;
         if (!privateKey) {
             throw new Error('Failed to derive key pair');
         }
-        _this = _super.call(this, Buffer.from(privateKey)) || this;
+        super(Buffer.from(privateKey));
         // console.log({MnemonicKeyPrivateKey: Buffer.from(privateKey)})
-        _this.mnemonic = mnemonic;
-        return _this;
+        this.mnemonic = mnemonic;
     }
-    return MnemonicKey;
-}(RawKey_1.RawKey));
+}
 exports.MnemonicKey = MnemonicKey;
 //# sourceMappingURL=MnemonicKey.js.map
