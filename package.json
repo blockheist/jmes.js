@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/jmesworld/jmes.js#readme",
   "dependencies": {
-    "@jmesworld/jmes.proto": "https://gitpkg.now.sh/mayoreee/jmes.proto/js/?chore",
+    "@jmesworld/jmes.proto": "https://gitpkg.now.sh/mayoreee/jmes.proto/js?chore",
     "@scure/bip32": "^1.1.1",
     "@terra-money/legacy.proto": "npm:@terra-money/terra.proto@^0.1.7",
     "@terra-money/terra.proto": "^2.1.0",
