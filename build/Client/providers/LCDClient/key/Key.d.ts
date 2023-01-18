@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { AccAddress, ValAddress, Tx, SignDoc, PublicKey } from '../core';
 import { SignatureV2 } from '../core/SignatureV2';
-import { SignMode } from '@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing';
+import { SignMode } from '@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing';
 /**
  * Abstract key interface that provides transaction signing features and Bech32 address
  * and public key derivation from a public key. This allows you to create custom key

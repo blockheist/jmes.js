@@ -41,7 +41,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Deposit = void 0;
 var Coins_1 = require("./Coins");
 var json_1 = require("../util/json");
-var gov_1 = require("@terra-money/terra.proto/cosmos/gov/v1beta1/gov");
+var gov_1 = require("@jmesworld/jmes.proto/src/cosmos/gov/v1beta1/gov");
 var Long = __importStar(require("long"));
 /**
  * Stores deposit information for a proposal

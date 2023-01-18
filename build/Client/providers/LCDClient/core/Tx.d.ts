@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { PublicKey } from './PublicKey';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
-import { SignMode as SignMode_pb } from '@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing';
-import { Tx as Tx_pb, TxBody as TxBody_pb, SignerInfo as SignerInfo_pb, ModeInfo as ModeInfo_pb, AuthInfo as AuthInfo_pb, ModeInfo_Single as ModeInfoSingle_pb, ModeInfo_Multi as ModeInfoMulti_pb } from '@terra-money/terra.proto/cosmos/tx/v1beta1/tx';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
+import { SignMode as SignMode_pb } from '@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing';
+import { Tx as Tx_pb, TxBody as TxBody_pb, SignerInfo as SignerInfo_pb, ModeInfo as ModeInfo_pb, AuthInfo as AuthInfo_pb, ModeInfo_Single as ModeInfoSingle_pb, ModeInfo_Multi as ModeInfoMulti_pb } from '@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx';
 import { CompactBitArray } from './CompactBitArray';
 import { Msg } from './Msg';
 import { Fee } from './Fee';

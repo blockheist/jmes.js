@@ -1,6 +1,6 @@
 import { JSONSerializable } from '../../../util/json';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
-import { PinCodesProposal as PinCodesProposal_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/proposal';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
+import { PinCodesProposal as PinCodesProposal_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal';
 /**
  * PinCodesProposal gov proposal content type to pin a set of code ids in the
  * wasmvm cache.

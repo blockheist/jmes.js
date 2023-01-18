@@ -1,7 +1,7 @@
 import { JSONSerializable, removeNull } from '../../../util/json';
 import { AccAddress } from '../../bech32';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
-import { SudoContractProposal as SudoContractProposal_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/proposal';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
+import { SudoContractProposal as SudoContractProposal_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal';
 
 export class SudoContractProposal extends JSONSerializable<
   SudoContractProposal.Amino,

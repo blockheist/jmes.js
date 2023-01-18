@@ -1,4 +1,4 @@
-/// <reference types="react-native" />
+/// <reference types="node" />
 import { OrderBy as OrderBy_pb } from '@terra-money/legacy.proto/cosmos/tx/v1beta1/service';
 export declare type APIParams = Record<string, string | number | null | undefined>;
 export interface Pagination {

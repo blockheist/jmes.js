@@ -1,8 +1,8 @@
 import { JSONSerializable } from '../../../util/json';
 import { AccAddress } from '../../bech32';
 import { Coins } from '../../Coins';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
-import { ExecuteContractProposal as ExecuteContractProposal_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/proposal';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
+import { ExecuteContractProposal as ExecuteContractProposal_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal';
 /**
  * ExecuteContractProposal gov proposal content type to call execute on a
  * contract.

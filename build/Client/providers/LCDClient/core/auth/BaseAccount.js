@@ -43,8 +43,8 @@ var PublicKey_1 = require("../PublicKey");
 var json_1 = require("../../util/json");
 // import { BaseAccount as BaseAccount_pb } from '@terra-money/legacy.proto/cosmos/auth/v1beta1/auth';
 // import { Any } from '@terra-money/legacy.proto/google/protobuf/any';
-var auth_1 = require("@terra-money/terra.proto/cosmos/auth/v1beta1/auth");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
+var auth_1 = require("@jmesworld/jmes.proto/src/cosmos/auth/v1beta1/auth");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
 var Long = __importStar(require("long"));
 /**
  * Stores information about an account fetched from the blockchain.

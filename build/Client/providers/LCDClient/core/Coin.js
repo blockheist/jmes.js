@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Coin = void 0;
 var json_1 = require("../util/json");
 var numeric_1 = require("./numeric");
-var coin_1 = require("@terra-money/terra.proto/cosmos/base/v1beta1/coin");
+var coin_1 = require("@jmesworld/jmes.proto/src/cosmos/base/v1beta1/coin");
 /**
  * Captures `sdk.Coin` and `sdk.DecCoin` from Cosmos SDK. A composite value that combines
  * a denomination with an amount value. Coins are immutable once created, and operations

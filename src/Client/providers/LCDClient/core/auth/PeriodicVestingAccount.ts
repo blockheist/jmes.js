@@ -1,12 +1,12 @@
 import { JSONSerializable } from '../../util/json';
 import { BaseVestingAccount } from './BaseVestingAccount';
 import { Coins } from '../Coins';
-import { BaseVestingAccount as BaseVestingAccount_pb } from '@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting';
+import { BaseVestingAccount as BaseVestingAccount_pb } from '@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting';
 import {
   PeriodicVestingAccount as PeriodicVestingAccount_pb,
   Period as Period_pb,
-} from '@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+} from '@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 import * as Long from 'long';
 import { PublicKey } from '../PublicKey';
 

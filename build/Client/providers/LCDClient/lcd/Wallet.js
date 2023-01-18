@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
 var signing_1 = require("@terra-money/legacy.proto/cosmos/tx/signing/v1beta1/signing");
-var signing_2 = require("@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing");
+var signing_2 = require("@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing");
 var Wallet = /** @class */ (function () {
     function Wallet(lcd, key) {
         this.lcd = lcd;

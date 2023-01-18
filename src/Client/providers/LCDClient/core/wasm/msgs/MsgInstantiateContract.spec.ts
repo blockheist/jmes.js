@@ -1,6 +1,6 @@
 import { MsgInstantiateContract } from './MsgInstantiateContract';
 import { MsgInstantiateContract as MsgInstantiateContract_legacy_pb } from '@terra-money/legacy.proto/terra/wasm/v1beta1/tx';
-import { MsgInstantiateContract as MsgInstantiateContract_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/tx';
+import { MsgInstantiateContract as MsgInstantiateContract_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx';
 
 const msgWithAdmin = new MsgInstantiateContract(
   'terra1x46rqay4d3cssq8gxxvqz8xt6nwlz4td20k38v',

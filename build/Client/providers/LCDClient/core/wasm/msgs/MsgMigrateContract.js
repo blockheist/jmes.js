@@ -40,9 +40,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MsgMigrateContract = void 0;
 var json_1 = require("../../../util/json");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
 var tx_1 = require("@terra-money/legacy.proto/terra/wasm/v1beta1/tx");
-var tx_2 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/tx");
+var tx_2 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx");
 var Long = __importStar(require("long"));
 var MsgMigrateContract = /** @class */ (function (_super) {
     __extends(MsgMigrateContract, _super);

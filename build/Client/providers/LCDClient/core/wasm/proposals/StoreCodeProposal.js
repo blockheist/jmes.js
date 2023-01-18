@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreCodeProposal = void 0;
 var json_1 = require("../../../util/json");
 var any_1 = require("@terra-money/legacy.proto/google/protobuf/any");
-var proposal_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/proposal");
+var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 var AccessConfig_1 = require("../AccessConfig");
 /**
  * StoreCodeProposal gov proposal content type to submit WASM code to the system

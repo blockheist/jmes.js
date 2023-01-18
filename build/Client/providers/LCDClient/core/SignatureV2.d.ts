@@ -1,8 +1,8 @@
 import { PublicKey } from './PublicKey';
 import { ModeInfo } from './Tx';
 import { CompactBitArray } from './CompactBitArray';
-import { SignMode as SignMode_pb } from '@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing';
-export { SignMode } from '@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing';
+import { SignMode as SignMode_pb } from '@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing';
+export { SignMode } from '@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing';
 export declare class SignatureV2 {
     public_key: PublicKey;
     data: SignatureV2.Descriptor;

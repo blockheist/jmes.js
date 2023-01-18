@@ -17,8 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SudoContractProposal = void 0;
 var json_1 = require("../../../util/json");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var proposal_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/proposal");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 var SudoContractProposal = /** @class */ (function (_super) {
     __extends(SudoContractProposal, _super);
     /**

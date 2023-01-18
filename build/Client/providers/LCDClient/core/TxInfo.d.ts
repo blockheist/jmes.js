@@ -1,5 +1,5 @@
 import { Tx } from './Tx';
-import { ABCIMessageLog as ABCIMessageLog_pb, TxResponse as TxResponse_pb } from '@terra-money/terra.proto/cosmos/base/abci/v1beta1/abci';
+import { ABCIMessageLog as ABCIMessageLog_pb, TxResponse as TxResponse_pb } from '@jmesworld/jmes.proto/src/cosmos/base/abci/v1beta1/abci';
 /**
  * A TxInfo data structure is used to capture information from a transaction lookup for
  * a transaction already included in a block

@@ -18,10 +18,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValConsPublicKey = exports.LegacyAminoMultisigPublicKey = exports.SimplePublicKey = exports.PublicKey = void 0;
 var json_1 = require("../util/json");
 var hash_1 = require("../util/hash");
-var keys_1 = require("@terra-money/terra.proto/cosmos/crypto/multisig/keys");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var keys_2 = require("@terra-money/terra.proto/cosmos/crypto/secp256k1/keys");
-var keys_3 = require("@terra-money/terra.proto/cosmos/crypto/ed25519/keys");
+var keys_1 = require("@jmesworld/jmes.proto/src/cosmos/crypto/multisig/keys");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+var keys_2 = require("@jmesworld/jmes.proto/src/cosmos/crypto/secp256k1/keys");
+var keys_3 = require("@jmesworld/jmes.proto/src/cosmos/crypto/ed25519/keys");
 var bech32_1 = require("bech32");
 // As discussed in https://github.com/binance-chain/javascript-sdk/issues/163
 // Prefixes listed here: https://github.com/tendermint/tendermint/blob/d419fffe18531317c28c29a292ad7d253f6cafdf/docs/spec/blockchain/encoding.md#public-key-cryptography

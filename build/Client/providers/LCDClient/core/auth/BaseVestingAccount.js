@@ -53,7 +53,7 @@ exports.BaseVestingAccount = void 0;
 var json_1 = require("../../util/json");
 var Coins_1 = require("../Coins");
 var BaseAccount_1 = require("./BaseAccount");
-var vesting_1 = require("@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting");
+var vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
 var Long = __importStar(require("long"));
 /**
  * Holds information about a Account which has vesting information.

@@ -53,8 +53,8 @@ exports.PeriodicVestingAccount = void 0;
 var json_1 = require("../../util/json");
 var BaseVestingAccount_1 = require("./BaseVestingAccount");
 var Coins_1 = require("../Coins");
-var vesting_1 = require("@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
+var vesting_1 = require("@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
 var Long = __importStar(require("long"));
 /**
  * PeriodicVestingAccount implements the VestingAccount interface. It

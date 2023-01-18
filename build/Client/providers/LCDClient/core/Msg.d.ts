@@ -14,7 +14,7 @@ import { IbcClientMsg } from './ibc/msgs/client';
 import { IbcConnectionMsg } from './ibc/msgs/connection';
 import { IbcChannelMsg } from './ibc/msgs/channel';
 import { CrisisMsg } from './crisis';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 export declare type Msg = BankMsg | DistributionMsg | FeeGrantMsg | GovMsg | MarketMsg | MsgAuthMsg | OracleMsg | SlashingMsg | StakingMsg | VestingMsg | WasmMsg | IbcTransferMsg | IbcClientMsg | IbcConnectionMsg | IbcChannelMsg | CrisisMsg;
 export declare namespace Msg {
     type Amino = BankMsg.Amino | DistributionMsg.Amino | FeeGrantMsg.Amino | GovMsg.Amino | MarketMsg.Amino | MsgAuthMsg.Amino | OracleMsg.Amino | SlashingMsg.Amino | StakingMsg.Amino | VestingMsg.Amino | WasmMsg.Amino | IbcTransferMsg.Amino | CrisisMsg.Amino;

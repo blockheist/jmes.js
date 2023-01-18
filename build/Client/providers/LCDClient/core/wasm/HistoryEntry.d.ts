@@ -1,4 +1,4 @@
-import { ContractCodeHistoryEntry as HistoryEntry_pb, ContractCodeHistoryOperationType } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
+import { ContractCodeHistoryEntry as HistoryEntry_pb, ContractCodeHistoryOperationType } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/types';
 import { JSONSerializable } from '../../util/json';
 import { AbsoluteTxPosition } from './AbsoluteTxPosition';
 /**

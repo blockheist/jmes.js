@@ -1,8 +1,8 @@
 import { JSONSerializable } from '../../util/json';
 import { BaseVestingAccount } from './BaseVestingAccount';
 import { PublicKey } from '../PublicKey';
-import { DelayedVestingAccount as DelayedVestingAccount_pb } from '@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+import { DelayedVestingAccount as DelayedVestingAccount_pb } from '@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 /**
  * DelayedVestingAccount implements the VestingAccount interface. It vests all
  * coins after a specific time, but non prior. In other words, it keeps them

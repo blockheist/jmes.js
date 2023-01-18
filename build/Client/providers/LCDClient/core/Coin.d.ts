@@ -1,7 +1,7 @@
 import { JSONSerializable } from '../util/json';
 import { Denom } from './Denom';
 import { Numeric } from './numeric';
-import { Coin as Coin_pb } from '@terra-money/terra.proto/cosmos/base/v1beta1/coin';
+import { Coin as Coin_pb } from '@jmesworld/jmes.proto/src/cosmos/base/v1beta1/coin';
 /**
  * Captures `sdk.Coin` and `sdk.DecCoin` from Cosmos SDK. A composite value that combines
  * a denomination with an amount value. Coins are immutable once created, and operations

@@ -1,8 +1,8 @@
 import { JSONSerializable } from '../../../util/json';
 import { AccAddress } from '../../bech32';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 import { MsgUpdateContractAdmin as MsgUpdateContractAdmin_legacy_pb } from '@terra-money/legacy.proto/terra/wasm/v1beta1/tx';
-import { MsgUpdateAdmin as MsgUpdateAdmin_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/tx';
+import { MsgUpdateAdmin as MsgUpdateAdmin_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx';
 export declare class MsgUpdateContractAdmin extends JSONSerializable<MsgUpdateContractAdmin.Amino, MsgUpdateContractAdmin.Data, MsgUpdateContractAdmin.Proto> {
     admin: AccAddress;
     new_admin: AccAddress;

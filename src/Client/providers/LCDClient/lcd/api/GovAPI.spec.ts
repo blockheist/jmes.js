@@ -1,6 +1,6 @@
 import { GovAPI } from './GovAPI';
 import { Coins, Dec, Int, Proposal } from '../../../core';
-import { Deposit } from '@terra-money/terra.proto/cosmos/gov/v1beta1/gov';
+import { Deposit } from '@jmesworld/jmes.proto/src/cosmos/gov/v1beta1/gov';
 import { LCDClient } from '../LCDClient';
 
 const terra = new LCDClient({

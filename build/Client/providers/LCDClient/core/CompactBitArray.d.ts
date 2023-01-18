@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { CompactBitArray as CompactBitArray_pb } from '@terra-money/terra.proto/cosmos/crypto/multisig/v1beta1/multisig';
+import { CompactBitArray as CompactBitArray_pb } from '@jmesworld/jmes.proto/src/cosmos/crypto/multisig/v1beta1/multisig';
 export declare class CompactBitArray {
     extra_bits_stored: number;
     elems: Buffer;

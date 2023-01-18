@@ -1,9 +1,9 @@
 import { JSONSerializable } from '../../../util/json';
 import { AccAddress } from '../../bech32';
 import { Coins } from '../../Coins';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 import { MsgExecuteContract as MsgExecuteContract_legacy_pb } from '@terra-money/legacy.proto/terra/wasm/v1beta1/tx';
-import { MsgExecuteContract as MsgExecuteContract_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/tx';
+import { MsgExecuteContract as MsgExecuteContract_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/tx';
 export declare class MsgExecuteContract extends JSONSerializable<MsgExecuteContract.Amino, MsgExecuteContract.Data, MsgExecuteContract.Proto> {
     sender: AccAddress;
     contract: AccAddress;

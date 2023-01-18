@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompactBitArray = void 0;
-var multisig_1 = require("@terra-money/terra.proto/cosmos/crypto/multisig/v1beta1/multisig");
+var multisig_1 = require("@jmesworld/jmes.proto/src/cosmos/crypto/multisig/v1beta1/multisig");
 var CompactBitArray = /** @class */ (function () {
     function CompactBitArray(extra_bits_stored, elems) {
         this.extra_bits_stored = extra_bits_stored;

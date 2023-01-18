@@ -1,8 +1,8 @@
 import { JSONSerializable } from '../../util/json';
 import { BaseVestingAccount } from './BaseVestingAccount';
 import { PublicKey } from '../PublicKey';
-import { ContinuousVestingAccount as ContinuousVestingAccount_pb } from '@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
+import { ContinuousVestingAccount as ContinuousVestingAccount_pb } from '@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
 /**
  * ContinuousVestingAccount implements the VestingAccount interface. It
  * continuously vests by unlocking coins linearly with respect to time.

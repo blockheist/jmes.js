@@ -16,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccessTypeParam = exports.AccessType = void 0;
-var types_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/types");
+var types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
 Object.defineProperty(exports, "AccessType", { enumerable: true, get: function () { return types_1.AccessType; } });
 var json_1 = require("../../util/json");
 var util_1 = require("./util");

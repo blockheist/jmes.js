@@ -39,7 +39,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HistoryEntry = void 0;
-var types_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/types");
+var types_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/types");
 var json_1 = require("../../util/json");
 var Long = __importStar(require("long"));
 var AbsoluteTxPosition_1 = require("./AbsoluteTxPosition");

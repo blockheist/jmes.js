@@ -39,7 +39,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccessConfigUpdate = void 0;
-var proposal_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/proposal");
+var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 var json_1 = require("../../util/json");
 var AccessConfig_1 = require("./AccessConfig");
 var Long = __importStar(require("long"));

@@ -25,8 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModeInfo = exports.SignerInfo = exports.AuthInfo = exports.TxBody = exports.Tx = void 0;
 var PublicKey_1 = require("./PublicKey");
-var signing_1 = require("@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing");
-var tx_1 = require("@terra-money/terra.proto/cosmos/tx/v1beta1/tx");
+var signing_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing");
+var tx_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx");
 var CompactBitArray_1 = require("./CompactBitArray");
 var Msg_1 = require("./Msg");
 var Fee_1 = require("./Fee");

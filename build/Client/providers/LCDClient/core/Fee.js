@@ -42,7 +42,7 @@ exports.Fee = void 0;
 var json_1 = require("../util/json");
 var Coins_1 = require("./Coins");
 var numeric_1 = require("./numeric");
-var tx_1 = require("@terra-money/terra.proto/cosmos/tx/v1beta1/tx");
+var tx_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx");
 var Long = __importStar(require("long"));
 /**
  * A transaction must include a fee, otherwise it will be rejected.

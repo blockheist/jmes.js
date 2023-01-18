@@ -41,7 +41,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SignDoc = void 0;
 var json_1 = require("../util/json");
 var Long = __importStar(require("long"));
-var tx_1 = require("@terra-money/terra.proto/cosmos/tx/v1beta1/tx");
+var tx_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx");
 var Tx_1 = require("./Tx");
 /**
  * A sign message is a data structure that is used to create a [[StdSignature]] to be later

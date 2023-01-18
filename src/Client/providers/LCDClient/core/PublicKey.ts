@@ -1,9 +1,9 @@
 import { JSONSerializable } from '../util/json';
 import { sha256, ripemd160 } from '../util/hash';
-import { LegacyAminoPubKey as LegacyAminoPubKey_pb } from '@terra-money/terra.proto/cosmos/crypto/multisig/keys';
-import { Any } from '@terra-money/terra.proto/google/protobuf/any';
-import { PubKey as PubKey_pb } from '@terra-money/terra.proto/cosmos/crypto/secp256k1/keys';
-import { PubKey as ValConsPubKey_pb } from '@terra-money/terra.proto/cosmos/crypto/ed25519/keys';
+import { LegacyAminoPubKey as LegacyAminoPubKey_pb } from '@jmesworld/jmes.proto/src/cosmos/crypto/multisig/keys';
+import { Any } from '@jmesworld/jmes.proto/src/google/protobuf/any';
+import { PubKey as PubKey_pb } from '@jmesworld/jmes.proto/src/cosmos/crypto/secp256k1/keys';
+import { PubKey as ValConsPubKey_pb } from '@jmesworld/jmes.proto/src/cosmos/crypto/ed25519/keys';
 import { bech32 } from 'bech32';
 
 // As discussed in https://github.com/binance-chain/javascript-sdk/issues/163

@@ -41,8 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InstantiateContractProposal = void 0;
 var json_1 = require("../../../util/json");
 var Coins_1 = require("../../Coins");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var proposal_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/proposal");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 var Long = __importStar(require("long"));
 /**
  * InstantiateContractProposal gov proposal content type to instantiate a

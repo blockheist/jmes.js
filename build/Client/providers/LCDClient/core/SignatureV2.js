@@ -4,9 +4,9 @@ exports.SignatureV2 = exports.SignMode = void 0;
 var PublicKey_1 = require("./PublicKey");
 var Tx_1 = require("./Tx");
 var CompactBitArray_1 = require("./CompactBitArray");
-var signing_1 = require("@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing");
-var multisig_1 = require("@terra-money/terra.proto/cosmos/crypto/multisig/v1beta1/multisig");
-var signing_2 = require("@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing");
+var signing_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing");
+var multisig_1 = require("@jmesworld/jmes.proto/src/cosmos/crypto/multisig/v1beta1/multisig");
+var signing_2 = require("@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing");
 Object.defineProperty(exports, "SignMode", { enumerable: true, get: function () { return signing_2.SignMode; } });
 var SignatureV2 = /** @class */ (function () {
     function SignatureV2(public_key, data, sequence) {

@@ -1,4 +1,4 @@
-import { AccessType, AccessTypeParam as AccessTypeParam_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
+import { AccessType, AccessTypeParam as AccessTypeParam_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/types';
 import { JSONSerializable } from '../../util/json';
 export { AccessType };
 /**

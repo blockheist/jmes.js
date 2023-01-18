@@ -1,4 +1,4 @@
-import { AbsoluteTxPosition as AbsoluteTxPosition_pb } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
+import { AbsoluteTxPosition as AbsoluteTxPosition_pb } from '@jmesworld/jmes.proto/cosmwasm/wasm/v1/types';
 import { JSONSerializable } from '../../util/json';
 /**
  *

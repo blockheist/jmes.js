@@ -40,8 +40,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PinCodesProposal = void 0;
 var json_1 = require("../../../util/json");
-var any_1 = require("@terra-money/terra.proto/google/protobuf/any");
-var proposal_1 = require("@terra-money/terra.proto/cosmwasm/wasm/v1/proposal");
+var any_1 = require("@jmesworld/jmes.proto/src/google/protobuf/any");
+var proposal_1 = require("@jmesworld/jmes.proto/cosmwasm/wasm/v1/proposal");
 var Long = __importStar(require("long"));
 /**
  * PinCodesProposal gov proposal content type to pin a set of code ids in the

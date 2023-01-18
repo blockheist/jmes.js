@@ -1,6 +1,6 @@
 import { JSONSerializable } from '../util/json';
 import { Coins } from './Coins';
-import { Fee as Fee_pb } from '@terra-money/terra.proto/cosmos/tx/v1beta1/tx';
+import { Fee as Fee_pb } from '@jmesworld/jmes.proto/src/cosmos/tx/v1beta1/tx';
 /**
  * A transaction must include a fee, otherwise it will be rejected.
  */

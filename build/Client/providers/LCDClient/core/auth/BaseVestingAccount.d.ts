@@ -1,7 +1,7 @@
 import { JSONSerializable } from '../../util/json';
 import { Coins } from '../Coins';
 import { BaseAccount } from './BaseAccount';
-import { BaseVestingAccount as BaseVestingAccount_pb } from '@terra-money/terra.proto/cosmos/vesting/v1beta1/vesting';
+import { BaseVestingAccount as BaseVestingAccount_pb } from '@jmesworld/jmes.proto/src/cosmos/vesting/v1beta1/vesting';
 import { PublicKey } from '../PublicKey';
 /**
  * Holds information about a Account which has vesting information.

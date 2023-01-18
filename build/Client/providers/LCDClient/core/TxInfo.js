@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TxLog = exports.EventsByType = exports.TxInfo = void 0;
 var Tx_1 = require("./Tx");
-var abci_1 = require("@terra-money/terra.proto/cosmos/base/abci/v1beta1/abci");
+var abci_1 = require("@jmesworld/jmes.proto/src/cosmos/base/abci/v1beta1/abci");
 /**
  * A TxInfo data structure is used to capture information from a transaction lookup for
  * a transaction already included in a block

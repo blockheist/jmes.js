@@ -1,7 +1,7 @@
 import { Coins } from './Coins';
 import { JSONSerializable } from '../util/json';
 import { AccAddress } from './bech32';
-import { Deposit as Deposit_pb } from '@terra-money/terra.proto/cosmos/gov/v1beta1/gov';
+import { Deposit as Deposit_pb } from '@jmesworld/jmes.proto/src/cosmos/gov/v1beta1/gov';
 /**
  * Stores deposit information for a proposal
  */

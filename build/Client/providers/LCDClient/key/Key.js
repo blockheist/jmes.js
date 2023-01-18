@@ -49,7 +49,7 @@ exports.Key = void 0;
 var bech32_1 = require("bech32");
 var core_1 = require("../core");
 var SignatureV2_1 = require("../core/SignatureV2");
-var signing_1 = require("@terra-money/terra.proto/cosmos/tx/signing/v1beta1/signing");
+var signing_1 = require("@jmesworld/jmes.proto/src/cosmos/tx/signing/v1beta1/signing");
 /**
  * Abstract key interface that provides transaction signing features and Bech32 address
  * and public key derivation from a public key. This allows you to create custom key
